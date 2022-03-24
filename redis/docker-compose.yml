@@ -1,0 +1,102 @@
+version: "3.9"
+
+services:
+  redis1_1:
+    image: liubin/redis
+    container_name: redis1_1
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis.master.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      liubin-bridge:
+        ipv4_address: 172.18.0.2
+  redis1_2:
+    image: liubin/redis
+    container_name: redis1_2
+    command: redis-server /usr/local/etc/redis/redis.conf --slaveof redis1_1 7001
+    depends_on:
+      - redis1_1
+    volumes:
+      - ./redis.slaveof.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      liubin-bridge:
+        ipv4_address: 172.18.0.3
+  redis1_3:
+    image: liubin/redis
+    container_name: redis1_3
+    command: redis-server /usr/local/etc/redis/redis.conf --slaveof redis1_1 7001
+    depends_on:
+      - redis1_1
+    volumes:
+      - ./redis.slaveof.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      liubin-bridge:
+        ipv4_address: 172.18.0.4
+
+  redis2_1:
+    image: liubin/redis
+    container_name: redis2_1
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis.master.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      liubin-bridge:
+        ipv4_address: 172.18.0.5
+  redis2_2:
+    image: liubin/redis
+    container_name: redis2_2
+    command: redis-server /usr/local/etc/redis/redis.conf --slaveof redis2_1 7001
+    depends_on:
+      - redis2_1
+    volumes:
+      - ./redis.slaveof.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      liubin-bridge:
+        ipv4_address: 172.18.0.6
+  redis2_3:
+    image: liubin/redis
+    container_name: redis2_3
+    command: redis-server /usr/local/etc/redis/redis.conf --slaveof redis2_1 7001
+    depends_on:
+      - redis2_1
+    volumes:
+      - ./redis.slaveof.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      liubin-bridge:
+        ipv4_address: 172.18.0.7
+
+  redis3_1:
+    image: liubin/redis
+    container_name: redis3_1
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis.master.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      liubin-bridge:
+        ipv4_address: 172.18.0.8
+  redis3_2:
+    image: liubin/redis
+    container_name: redis3_2
+    command: redis-server /usr/local/etc/redis/redis.conf --slaveof redis3_1 7001
+    depends_on:
+      - redis3_1
+    volumes:
+      - ./redis.slaveof.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      liubin-bridge:
+        ipv4_address: 172.18.0.9
+  redis3_3:
+    image: liubin/redis
+    container_name: redis3_3
+    command: redis-server /usr/local/etc/redis/redis.conf --slaveof redis3_1 7001
+    depends_on:
+      - redis3_1
+    volumes:
+      - ./redis.slaveof.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      liubin-bridge:
+        ipv4_address: 172.18.0.10
+
+networks:
+  liubin-bridge:
+    external: true
