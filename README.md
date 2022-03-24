@@ -14,10 +14,12 @@ docker rm $(docker ps -n 10 -q)
 docker volume prune
 ```
 ## docker-compose
-- config  Validate and view the Compose file
-- up  Create and start containers
-  - f compose file (default: docker-compose.yml)
-  - p project name (default: directory name)
-- down  Stop and remove containers, networks, images, and volumes
-- logs log
+- `config`  Validate and view the Compose file
+- `up`  Create and start containers
+  - `-f` compose file (default: docker-compose.yml)
+  - `-p` project name (default: directory name)
+- `down`  Stop and remove containers, networks, images, and volumes
+- `logs` [options] [SERVICE...] logs
+  - `-f`   Follow log output.
+  - `--tail="all"` Number of lines to show from the end of the logs for each container.
 - https://docs.docker.com/compose/reference/
