@@ -1,0 +1,56 @@
+version: "3.9"
+services:
+  mongo.configsvr:
+    image: liubin/mongo
+    container_name: mongo.configsvr
+    command: --config /etc/mongo/mongod.conf
+    volumes:
+      - ./config/mongodsvr.conf:/etc/mongo/mongod.conf
+  mongo.mongos:
+    image: liubin/mongo
+    container_name: mongo.mongos
+    command: mongos --config /etc/mongo/mongod.conf
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./config/mongods.conf:/etc/mongo/mongod.conf
+  mongo.shard11:
+    image: liubin/mongo
+    container_name: mongo.shard11
+    command: --config /etc/mongo/mongod.conf
+    volumes:
+      - ./config/mongod1.conf:/etc/mongo/mongod.conf
+  mongo.shard12:
+    image: liubin/mongo
+    container_name: mongo.shard12
+    command: --config /etc/mongo/mongod.conf
+    volumes:
+      - ./config/mongod1.conf:/etc/mongo/mongod.conf
+  mongo.shard13:
+    image: liubin/mongo
+    container_name: mongo.shard13
+    command: --config /etc/mongo/mongod.conf
+    volumes:
+      - ./config/mongod1.conf:/etc/mongo/mongod.conf
+  mongo.shard21:
+    image: liubin/mongo
+    container_name: mongo.shard21
+    command: --config /etc/mongo/mongod.conf
+    volumes:
+      - ./config/mongod2.conf:/etc/mongo/mongod.conf
+  mongo.shard22:
+    image: liubin/mongo
+    container_name: mongo.shard22
+    command: --config /etc/mongo/mongod.conf
+    volumes:
+      - ./config/mongod2.conf:/etc/mongo/mongod.conf
+  mongo.shard23:
+    image: liubin/mongo
+    container_name: mongo.shard23
+    command: --config /etc/mongo/mongod.conf
+    volumes:
+      - ./config/mongod2.conf:/etc/mongo/mongod.conf
+networks:
+  default:
+    external:
+      name: liubin-bridge
