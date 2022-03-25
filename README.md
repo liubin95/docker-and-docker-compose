@@ -27,3 +27,10 @@ docker volume prune
 ## MySQL
 - Windows文件到容器中权限`777`，MySQL不会使用配置文件
 - 简单解决：将文件设置 只读
+## mongoDB
+```shell
+# 导入json 数据
+mongoimport --db liubin --collection youtube_user --jsonArray /liubin_youtobe_user.json
+# 导入csv
+mongoimport --db liubin --collection user_behavior --type csv --fieldFile ./fieldFile.txt --numInsertionWorkers 4 ./xad.csv
+```
