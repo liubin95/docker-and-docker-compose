@@ -23,3 +23,7 @@ docker volume prune
   - `-f`   Follow log output.
   - `--tail="all"` Number of lines to show from the end of the logs for each container.
 - https://docs.docker.com/compose/reference/
+
+## MySQL
+- Windows文件到容器中权限`777`，MySQL不会使用配置文件
+- 简单解决：将文件设置 只读

@@ -3,6 +3,7 @@ version: "3.9"
 services:
   redis1_1:
     image: liubin/redis
+    build: .
     container_name: redis1_1
     command: redis-server /usr/local/etc/redis/redis.conf
     volumes:

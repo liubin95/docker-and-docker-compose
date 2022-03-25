@@ -1,0 +1,9 @@
+[mysqld]
+# 从服务器唯一ID
+server-id=2
+# 启用 GTID 模式
+gtid_mode=ON
+# 启用 GTID 模式
+enforce-gtid-consistency=ON
+# 副本服务器上禁用二进制日志记录
+log-slave-updates=OFF

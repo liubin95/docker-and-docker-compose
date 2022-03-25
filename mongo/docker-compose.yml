@@ -2,6 +2,7 @@ version: "3.9"
 services:
   mongo.configsvr:
     image: liubin/mongo
+    build: .
     container_name: mongo.configsvr
     command: --config /etc/mongo/mongod.conf
     volumes:
