@@ -1,0 +1,16 @@
+cluster.name: capital-cluster
+node.name: codepasser-node1
+node.master: true
+node.data: true
+#network.host: 0.0.0.0
+network.bind_host: 0.0.0.0
+network.publish_host: node1.es.codepasser.io
+http.port: 9200
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+transport.tcp.port: 9300
+discovery.zen.ping.unicast.hosts: ["node1.es.codepasser.io:9300","node2.es.codepasser.io:9300","node3.es.codepasser.io:9300"]
+discovery.zen.minimum_master_nodes: 2
+bootstrap.memory_lock: false
+bootstrap.system_call_filter: false
+cluster.initial_master_nodes: ["codepasser-node1","codepasser-node2","codepasser-node3"]

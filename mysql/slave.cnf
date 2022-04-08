@@ -7,3 +7,4 @@ gtid_mode=ON
 enforce-gtid-consistency=ON
 # 副本服务器上禁用二进制日志记录
 log-slave-updates=OFF
+sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
