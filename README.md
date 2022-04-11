@@ -28,4 +28,10 @@ docker volume prune
 - `logs` [options] [SERVICE...] logs
     - `-f`   Follow log output.
     - `--tail="all"` Number of lines to show from the end of the logs for each container.
-- https://docs.docker.com/compose/reference/
+- `ps`  List containers
+- `exec`  Run a command in a running container `docker-compose exec kibana sh -c "ps -aux"`
+- `top`  Display the running processes of a container
+- `stop`  Stop containers
+- `start`  Start containers
+- `restart`  Restart stopped containers
+- [https://docs.docker.com/compose/reference](https://docs.docker.com/compose/reference/)
