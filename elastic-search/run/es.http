@@ -1,0 +1,26 @@
+### show cluster health info
+GET http://127.0.0.1:9200/_cluster/health?pretty
+
+### show es license info
+GET http://127.0.0.1:9200/_xpack/license
+
+### show es plugin info
+GET http://127.0.0.1:9200/_cat/plugins?pretty
+
+### test ik analyzer
+GET http://127.0.0.1:9200/_analyze
+Content-Type: application/json
+
+{
+  "analyzer": "ik_max_word",
+  "text": "深圳上海程序员一个月4.5万"
+}
+
+### test pinyin analyzer
+GET http://127.0.0.1:9200/_analyze
+Content-Type: application/json
+
+{
+  "analyzer": "pinyin",
+  "text": "总结"
+}

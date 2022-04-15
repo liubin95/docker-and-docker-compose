@@ -25,7 +25,7 @@ docker volume prune
     - `-f` compose file (default: docker-compose.yml)
     - `-p` project name (default: directory name)
 - `down`  Stop and remove containers, networks, images, and volumes
-- `logs` [options] [SERVICE...] logs
+- `logs [options] [SERVICE...]` logs
     - `-f`   Follow log output.
     - `--tail="all"` Number of lines to show from the end of the logs for each container.
 - `ps`  List containers

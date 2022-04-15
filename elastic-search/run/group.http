@@ -1,0 +1,169 @@
+### group by category
+# size=0 只获取聚合结果，而不要返回参与聚合的原始数据
+# _key 是聚合结果的字段名，_count 是聚合结果的数量
+GET http://127.0.0.1:9200/test_index/_search?pretty=true&size=0
+Content-Type: application/json
+
+{
+  "aggs": {
+    "category_count": {
+      "terms": {
+        "field": "category"
+      }
+    }
+  }
+}
+
+### group by and order by
+GET http://127.0.0.1:9200/test_index/_search?pretty=true&size=0
+Content-Type: application/json
+
+{
+  "aggs": {
+    "category_count": {
+      "terms": {
+        "field": "category",
+        "order": {
+          "_count": "desc"
+        }
+      }
+    }
+  }
+}
+
+### group by and filter
+# query global filter
+# aggs filter is only for aggs
+GET http://127.0.0.1:9200/test_index/_search?pretty=true&size=0
+Content-Type: application/json
+
+{
+  "query": {
+    "range": {
+      "likeCount": {
+        "gte": 200
+      }
+    }
+  },
+  "aggs": {
+    "filter_category_count": {
+      "aggs": {
+        "category_count": {
+          "terms": {
+            "field": "category"
+          }
+        }
+      },
+      "filter": {
+        "range": {
+          "length": {
+            "gte": 400
+          }
+        }
+      }
+    }
+  }
+}
+
+### group by title hotwords
+# fielddata 开启 text 字段可聚合、排序或脚本查询
+GET http://127.0.0.1:9200/test_index/_search?pretty=true&size=0
+Content-Type: application/json
+
+{
+  "aggs": {
+    "title_count": {
+      "terms": {
+        "field": "title"
+      }
+    }
+  }
+}
+
+### group by category sum likeCount
+GET http://127.0.0.1:9200/test_index/_search?pretty=true&size=0
+Content-Type: application/json
+
+{
+  "aggs": {
+    "category_count": {
+      "terms": {
+        "field": "category"
+      },
+      "aggs": {
+        "sum_likeCount": {
+          "sum": {
+            "field": "likeCount"
+          }
+        }
+      }
+    }
+  }
+}
+
+### histogram length sum likeCount
+# histogram 分段聚合
+# min_doc_count=0 表示聚合结果中每个段的文档数量至少为 0
+GET http://127.0.0.1:9200/test_index/_search?pretty=true&size=0
+Content-Type: application/json
+
+{
+  "aggs": {
+    "length_count": {
+      "histogram": {
+        "field": "length",
+        "interval": 100,
+        "min_doc_count": 0
+      },
+      "aggs": {
+        "sum_likeCount": {
+          "sum": {
+            "field": "likeCount"
+          }
+        }
+      }
+    }
+  }
+}
+
+### percentiles length
+# percentiles 分位数聚合
+# 75% data length <= 670
+GET http://127.0.0.1:9200/test_index/_search?pretty=true&size=0
+Content-Type: application/json
+
+{
+  "aggs": {
+    "length_count": {
+      "percentiles": {
+        "field": "length",
+        "percents": [
+          50,
+          75,
+          95,
+          99
+        ]
+      }
+    }
+  }
+}
+
+### percentile rank length
+# percentile_rank 分位排名聚合
+# data length <= 500 is 75%
+GET http://127.0.0.1:9200/test_index/_search?pretty=true&size=0
+Content-Type: application/json
+
+{
+  "aggs": {
+    "length_count": {
+      "percentile_ranks": {
+        "field": "length",
+        "values": [
+          500,
+          700
+        ]
+      }
+    }
+  }
+}

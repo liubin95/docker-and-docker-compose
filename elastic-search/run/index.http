@@ -1,0 +1,109 @@
+### create index
+PUT http://127.0.0.1:9200/test_index
+Content-Type: application/json
+
+{
+  "settings": {
+    "index": {
+      "number_of_shards": "3",
+      "number_of_replicas": "2",
+      "analysis": {
+        "analyzer": {
+          "ikAnalyzer": {
+            "type": "custom",
+            "tokenizer": "ik_max_word"
+          },
+          "pinyinAnalyzer": {
+            "tokenizer": "pinyin_word"
+          }
+        },
+        "tokenizer": {
+          "pinyin_word": {
+            "type": "pinyin",
+            "keep_first_letter": true,
+            "keep_separate_first_letter": true,
+            "keep_full_pinyin": true,
+            "keep_original": false,
+            "limit_first_letter_length": 16,
+            "lowercase": true
+          }
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "text",
+        "analyzer": "ikAnalyzer",
+        "search_analyzer": "ikAnalyzer",
+        "fielddata": true,
+        "fields": {
+          "pinyin": {
+            "type": "text",
+            "analyzer": "pinyinAnalyzer",
+            "search_analyzer": "pinyinAnalyzer"
+          }
+        }
+      },
+      "content": {
+        "type": "text",
+        "analyzer": "ikAnalyzer",
+        "search_analyzer": "ikAnalyzer"
+      },
+      "category": {
+        "type": "keyword"
+      },
+      "likeCount": {
+        "type": "integer"
+      }
+    }
+  }
+}
+
+### show index
+GET http://127.0.0.1:9200/test_index?pretty
+
+### update index mapping
+PUT http://127.0.0.1:9200/test_index/_mapping
+Content-Type: application/json
+
+{
+  "properties": {
+    "length": {
+      "type": "integer"
+    }
+  }
+}
+
+### delete index
+DELETE http://127.0.0.1:9200/test_index
+
+### insert data
+POST http://127.0.0.1:9200/test_index/_doc
+Content-Type: application/json
+
+{
+  "title": "es笔记---新建es索引 索引名称为test_index 索引类型为_doc 文档id为1",
+  "content": "深圳上海程序员一个月4.5万",
+  "category": "程序员"
+}
+
+### insert data batch
+POST 127.0.0.1:9200/test_index/_bulk?pretty
+Content-Type: application/x-ndjson
+
+< data.insert.txt
+
+### update data by query
+POST http://127.0.0.1:9200/test_index/_update_by_query
+Content-Type: application/json
+
+{
+  "query": {
+    "match": {
+      "title.pinyin": "s"
+    }
+  },
+  "script": "ctx._source.length = {{$randomInt}}"
+}

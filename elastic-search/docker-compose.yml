@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  es1:
+    build: ./build/elasticsearch
+    image: liubin/elasticsearch
+    container_name: es1
+    environment:
+      - node.name=es-cluster-node1
+      - network.publish_host=es1
+    volumes:
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./config/jvm.options:/usr/share/elasticsearch/config/jvm.options
+      - ./plugins:/usr/share/elasticsearch/plugins
+    ports:
+      - "9200:9200"
+  es2:
+    image: liubin/elasticsearch
+    container_name: es2
+    environment:
+      - node.name=es-cluster-node2
+      - network.publish_host=es2
+    volumes:
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./config/jvm.options:/usr/share/elasticsearch/config/jvm.options
+      - ./plugins:/usr/share/elasticsearch/plugins
+  es3:
+    image: liubin/elasticsearch
+    container_name: es3
+    environment:
+      - node.name=es-cluster-node3
+      - network.publish_host=es3
+    volumes:
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./config/jvm.options:/usr/share/elasticsearch/config/jvm.options
+      - ./plugins:/usr/share/elasticsearch/plugins
+  es-head:
+    build: ./build/es-head
+    image: liubin/es-head
+    container_name: es-head
+    ports:
+      - "9100:9100"
+
+networks:
+  default:
+    external:
+      name: liubin-bridge

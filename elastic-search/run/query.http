@@ -1,0 +1,78 @@
+### match category
+GET http://127.0.0.1:9200/test_index/_search?pretty
+Content-Type: application/json
+
+{
+  "query": {
+    "term": {
+      "category": "程序员"
+    }
+  }
+}
+
+### search title
+GET http://127.0.0.1:9200/test_index/_search?pretty
+Content-Type: application/json
+
+{
+  "query": {
+    "match": {
+      "title": "docker"
+    }
+  }
+}
+
+### search title pinyin
+GET http://127.0.0.1:9200/test_index/_search?pretty
+Content-Type: application/json
+
+{
+  "query": {
+    "match": {
+      "title.pinyin": "jianjie"
+    }
+  }
+}
+
+### search likeCount gte 500
+GET http://127.0.0.1:9200/test_index/_search?pretty
+Content-Type: application/json
+
+{
+  "query": {
+    "range": {
+      "likeCount": {
+        "gte": 500
+      }
+    }
+  }
+}
+
+### search title highlight
+# fragment_size：返回内容的大小，默认为 100，最小为 18
+# number_of_fragments：返回的片段数量（按照 size 分割，可以想象成分页，返回几条数据）
+# no_match_size：对于没有匹配到关键词的 doc，可以设置最多返回多少个字符的文本
+GET http://127.0.0.1:9200/test_index/_search?pretty
+Content-Type: application/json
+
+{
+  "query": {
+    "match": {
+      "title": "索引"
+    }
+  },
+  "highlight": {
+    "pre_tags": [
+      "<em class='font-red'>"
+    ],
+    "post_tags": [
+      "</em>"
+    ],
+    "fields": {
+      "title": {
+        "fragment_size": 10,
+        "number_of_fragments": 3
+      }
+    }
+  }
+}
