@@ -1,6 +1,6 @@
 [mysqld]
 # 从服务器唯一ID
-server-id=2
+server-id=200
 # 启用 GTID 模式
 gtid_mode=ON
 # 启用 GTID 模式
