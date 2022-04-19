@@ -1,0 +1,21 @@
+{
+  "name": "kafka-client",
+  "version": "1.0.0",
+  "description": "kafka client node",
+  "main": "index.js",
+  "scripts": {
+    "producer": "npx ts-node producer.ts",
+    "consumer": "npx ts-node consumer.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "liubin",
+  "license": "ISC",
+  "dependencies": {
+    "chance": "^1.1.8",
+    "kafkajs": "^1.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.25",
+    "typescript": "^4.6.3"
+  }
+}

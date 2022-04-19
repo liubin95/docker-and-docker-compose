@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  zook:
+    image: liubin/zookeeper
+    container_name: zook
+    ports:
+      - "2181:2181"
+  cmak:
+    build: ./build/cmak
+    image: liubin/cmak
+    container_name: cmak
+    ports:
+      - "8080:9000"
+    depends_on:
+      - zook
+  kafka1:
+    image: liubin/kafka
+    build: ./build/kafka
+    container_name: kafka1
+    depends_on:
+      - zook
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zook:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+  kafka2:
+    image: liubin/kafka
+    build: ./build/kafka
+    container_name: kafka2
+    depends_on:
+      - zook
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zook:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+  kafka3:
+    image: liubin/kafka
+    build: ./build/kafka
+    container_name: kafka3
+    depends_on:
+      - zook
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zook:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+
+networks:
+  default:
+    external:
+      name: liubin-bridge
