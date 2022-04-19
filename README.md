@@ -1,10 +1,25 @@
 # docker-and-docker-compose
 
-## dicker build
+## docker build
 
 ```shell
 # build 命令
 docker build -t liubin/app .
+```
+
+## docker run
+
+```shell
+# run 命令
+docker run --rm -p 8080:8080 --name app -d liubin/app
+```
+
+## docker export
+
+```shell
+# export 命令
+# 容器无法启动，可以导出，查看结构和log
+docker export --output="app.tar" app
 ```
 
 ## docker clean
