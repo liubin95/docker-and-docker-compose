@@ -18,11 +18,11 @@ free -ht
 echo 3 > /proc/sys/vm/drop_caches
 ```
 
-> To free pagecache:<br>
+> To free page cache:<br>
 > echo 1 > /proc/sys/vm/drop_caches<br>
 > To free reclaimable slab objects (includes dentries and inodes):<br>
 > echo 2 > /proc/sys/vm/drop_caches<br>
-> To free slab objects and pagecache:<br>
+> To free slab objects and page cache:<br>
 > echo 3 > /proc/sys/vm/drop_caches
 
 ## disk

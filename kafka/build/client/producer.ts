@@ -1,7 +1,7 @@
 // Load Chance
 import Chance = require('chance');
 import {Kafka, Producer} from 'kafkajs';
-import { Message } from './message';
+import {Message} from './message';
 
 class ProducerClient {
     private chance: Chance;
@@ -10,6 +10,9 @@ class ProducerClient {
 
     constructor() {
         this.msg_num = parseInt(process.argv.slice(2)[0]);
+        if (isNaN(this.msg_num)) {
+            throw new Error('Invalid number of messages');
+        }
         console.log(` hello world producer ${this.msg_num}`);
         // Instantiate Chance so it can be used
         this.chance = new Chance();
@@ -48,5 +51,5 @@ const main = new ProducerClient();
 main.send_msg('test-topic').then((r) => {
     console.log(r);
 }).catch((err) => {
-    console.log(err);
+    console.error(err);
 });
