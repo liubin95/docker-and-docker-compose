@@ -30,8 +30,8 @@ echo 3 > /proc/sys/vm/drop_caches
 ```shell
 # show disk info
 df -h
-# show disk info
-du -sh *
+# show dir var disk info
+du -sh /var/*
 ```
 
 ## pipeline

@@ -31,6 +31,33 @@ docker rm $(docker ps -a -q)
 docker rm $(docker ps -n 10 -q)
 # 删除未使用的volume
 docker volume prune
+# rm unused images
+docker image prune -a
+# rm everything
+docker system prune --volumes
+```
+
+## docker remote
+
+### docker login
+
+```shell
+# login github packge
+cat ~/pattoken.txt | docker login ghcr.io -u liubin95 --password-stdin
+```
+
+### docker tag
+
+```shell
+# tag 命令
+docker tag liubin/es-head:latest ghcr.io/liubin/es-head:latest
+```
+
+### docker push
+
+```shell
+# push 命令
+docker push ghcr.io/liubin/es-head:latest
 ```
 
 ## docker-compose
