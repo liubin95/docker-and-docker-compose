@@ -43,7 +43,7 @@ docker system prune --volumes
 
 ```shell
 # login github packge
-cat ~/pattoken.txt | docker login ghcr.io -u liubin95 --password-stdin
+cat ~/pattoken.txt | docker login -u liubin95 --password-stdin ghcr.io
 ```
 
 ### docker tag
