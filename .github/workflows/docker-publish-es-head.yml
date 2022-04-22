@@ -62,7 +62,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
-            last=auto
+            latest=auto
           # 使用自定义值而不是 git tag
           tags: |
             type=semver,pattern={{version}},value=v1.0.0
