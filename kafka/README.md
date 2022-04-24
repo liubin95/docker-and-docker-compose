@@ -2,6 +2,21 @@
 
 ## build
 
+### node ts client (for testing)
+
+```shell
+# install ts
+npm install -D typescript
+npm install -D ts-node
+# create ts config.json
+# install kafkajs
+npm install kafkajs
+# run producer client 100 is number of messages 
+npm run producer 100
+# run consumer client
+npm run consumer
+```
+
 ## dev
 
 ```shell
