@@ -60,15 +60,24 @@ docker tag liubin/es-head:latest ghcr.io/liubin/es-head:latest
 docker push ghcr.io/liubin/es-head:latest
 ```
 
+### docker cp
+
+```shell
+# cp from container to host
+docker cp app:/usr/local/bin/app /usr/local/bin/app
+# cp from host to container
+docker cp /usr/local/bin/app app:/usr/local/bin/app
+```
+
 ## docker-compose
 
 - `config`  Validate and view the Compose file
 - `up`  Create and start containers
-    - `-f` compose file (default: docker-compose.yml)
-    - `-p` project name (default: directory name)
+  - `-f` compose file (default: docker-compose.yml)
+  - `-p` project name (default: directory name)
 - `down`  Stop and remove containers, networks, images, and volumes
 - `logs [options] [SERVICE...]` logs
-    - `-f`   Follow log output.
+  - `-f`   Follow log output.
     - `--tail="all"` Number of lines to show from the end of the logs for each container.
 - `ps`  List containers
 - `exec`  Run a command in a running container `docker-compose exec kibana sh -c "ps -aux"`
