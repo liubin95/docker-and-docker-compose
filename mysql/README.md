@@ -5,6 +5,15 @@
 - Windows文件到容器中权限`777`，MySQL不会使用配置文件
 - 简单解决：将文件设置 只读
 
+## dev
+
+### DDL
+
+```sql
+-- delete all data from table
+truncate table table_name;
+```
+
 ## ops
 
 - show mysql running processlist `show processlist;`
@@ -23,3 +32,24 @@
 | trx\_id         | trx\_state | trx\_started        | trx\_requested\_lock\_id | trx\_wait\_started | trx\_weight | trx\_mysql\_thread\_id | trx\_query | trx\_operation\_state | trx\_tables\_in\_use | trx\_tables\_locked | trx\_lock\_structs | trx\_lock\_memory\_bytes | trx\_rows\_locked | trx\_rows\_modified | trx\_concurrency\_tickets | trx\_isolation\_level | trx\_unique\_checks | trx\_foreign\_key\_checks | trx\_last\_foreign\_key\_error | trx\_adaptive\_hash\_latched | trx\_adaptive\_hash\_timeout | trx\_is\_read\_only | trx\_autocommit\_non\_locking | trx\_schedule\_weight |
 |:----------------|:-----------|:--------------------|:-------------------------|:-------------------|:------------|:-----------------------|:-----------|:----------------------|:---------------------|:--------------------|:-------------------|:-------------------------|:------------------|:--------------------|:--------------------------|:----------------------|:--------------------|:--------------------------|:-------------------------------|:-----------------------------|:-----------------------------|:--------------------|:------------------------------|:----------------------|
 | 421573637730304 | RUNNING    | 2022-04-07 14:57:00 | NULL                     | NULL               | 0           | 27                     | NULL       | NULL                  | 0                    | 0                   | 0                  | 1128                     | 0                 | 0                   | 0                         | REPEATABLE READ       | 1                   | 1                         | NULL                           | 0                            | 0                            | 0                   | 0                             | NULL                  |
+
+### data migrate
+
+- rename
+
+```sql
+-- same instance different database
+rename table old_base.old_table to new_base.new_table;
+```
+
+- dump
+
+```shell
+# export from old base
+mysqldump -u root -p123456 -h 127.0.0.1 -P 3306 --databases old_base --tables old_table --where "id > 100" > old_table.sql
+# import to new base
+mysql -u root -p123456 -h 127.0.0.1 -P 3306 new_base < old_table.sql
+# or into new base
+use new_base;
+source /old_table.sql
+```
