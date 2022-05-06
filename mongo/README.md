@@ -27,9 +27,23 @@ db.book.dropIndex("title_auth_index");
 
 ## dev
 
+### data
+
 ```shell
 # import json data
 mongoimport --db liubin --collection youtube_user --jsonArray /liubin_youtobe_user.json
 # import csv file
 mongoimport --db liubin --collection user_behavior --type csv --fieldFile ./fieldFile.txt --numInsertionWorkers 4 ./xad.csv
+```
+
+### query
+
+```js
+// group by user_id 
+// select user_id, count(*) as count from user_behavior group by user_id
+db.user_behavior.aggregate([
+                             {$group: {_id: "$user_id", count: {$sum: 1}}},
+                             {$sort: {count: -1}},
+                             {$limit: 10},
+                           ]);
 ```
