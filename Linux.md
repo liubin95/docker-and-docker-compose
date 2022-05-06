@@ -34,6 +34,13 @@ df -h
 du -sh /var/*
 ```
 
+## port
+
+```shell
+# show port info
+netstat -tunlp
+```
+
 ## pipeline
 
 ```shell
