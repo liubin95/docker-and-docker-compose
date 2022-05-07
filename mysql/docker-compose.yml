@@ -11,7 +11,7 @@ services:
     volumes:
       - ./master.cnf:/etc/mysql/my.cnf:ro
       - /var/lib/mysql-files
-      - ../../tmp/dump:/dump
+      - ../../../tmp/dump:/dump
     environment:
       - MYSQL_ROOT_PASSWORD=ZAQ!2wsx
       - MYSQL_DATABASE=demo
