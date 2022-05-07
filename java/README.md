@@ -35,6 +35,16 @@ java -Djarmode=layertools -jar target/*.jar extract --destination target/extract
 docker build -t liubin/spring-boot .
 ```
 
+#### Multi-Stage Build
+
+[Dockerfile-spring-boot-build-run](./Dockerfile-spring-boot-build-run)
+> 两阶段构建，第一阶段mvnw clean package，`settings.xml`使用镜像加速构建。第二阶段docker build -t liubin/spring-boot .
+
+#### Multi-Stage Build cache
+
+[Dockerfile-spring-boot-build-run-cache](./Dockerfile-spring-boot-build-run-cache)
+> 两阶段构建，第一阶段mvnw clean package，`--mount=type=cache,target=/root/.m2` 缓存已经下载的依赖，加快构建速度。
+
 ### run
 
 ```shell

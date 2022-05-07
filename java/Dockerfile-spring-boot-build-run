@@ -1,0 +1,26 @@
+FROM openjdk:8-jdk-alpine as build
+WORKDIR /workspace/app
+
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY src src
+
+RUN ./mvnw install -DskipTests -s .mvn/wrapper/settings.xml
+RUN mkdir -p target/extracted && java -Djarmode=layertools -jar target/*.jar extract --destination target/extracted
+
+FROM openjdk:8-jre-alpine
+ENV TZ Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+
+ARG EXTRACTED=/workspace/app/target/extracted
+ENV JAVA_OPTS="-Xmx100m -Xms100m"
+
+COPY --from=build ${EXTRACTED}/dependencies/ ./
+COPY --from=build ${EXTRACTED}/spring-boot-loader/ ./
+COPY --from=build ${EXTRACTED}/snapshot-dependencies/ ./
+COPY --from=build ${EXTRACTED}/application/ ./
+
+ENTRYPOINT ["sh", "-c","java ${JAVA_OPTS} org.springframework.boot.loader.JarLauncher"]
