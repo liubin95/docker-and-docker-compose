@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  nginx:
+    build: ./build/nginx
+    image: liubin/nginx
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./build/nginx/conf:/etc/nginx/conf
+      - ./build/nginx/static-html-directory:/usr/share/nginx/my-html
+
+  node-server:
+    build: ./build/node-server
+    image: liubin/node-server
+    container_name: node-server
+
+networks:
+  liubin-bridge:
+    external: true

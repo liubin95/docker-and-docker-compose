@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>nginx</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            height: 100vh;
+            background-image: url("http://localhost:8080/images/tree.png");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #content {
+            color: aliceblue;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h1 id="content">hello nginx</h1>
+<script type="application/javascript">
+    // Make a request for a user with a given ID
+    axios.get('http://localhost:8080/api/date')
+        .then(function (response) {
+            // handle success
+            console.log(response.data);
+            window.document.getElementById("content").innerHTML = response.data;
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        });
+</script>
+</body>
+</html>

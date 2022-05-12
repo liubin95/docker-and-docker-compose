@@ -71,6 +71,9 @@ docker cp /usr/local/bin/app app:/usr/local/bin/app
 
 ## docker-compose
 
+> docker run 不可以使用相对路径，使用`$pwd`</br>
+> docker-compose 可以使用相对路径
+
 - `config`  Validate and view the Compose file
 - `up`  Create and start containers
   - `-f` compose file (default: docker-compose.yml)
@@ -78,7 +81,7 @@ docker cp /usr/local/bin/app app:/usr/local/bin/app
 - `down`  Stop and remove containers, networks, images, and volumes
 - `logs [options] [SERVICE...]` logs
   - `-f`   Follow log output.
-    - `--tail="all"` Number of lines to show from the end of the logs for each container.
+  - `--tail="all"` Number of lines to show from the end of the logs for each container.
 - `ps`  List containers
 - `exec`  Run a command in a running container `docker-compose exec kibana sh -c "ps -aux"`
 - `top`  Display the running processes of a container
