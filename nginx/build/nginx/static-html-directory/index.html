@@ -22,17 +22,24 @@
 <body>
 <h1 id="content">hello nginx</h1>
 <script type="application/javascript">
-    // Make a request for a user with a given ID
-    axios.get('http://localhost:8080/api/date')
-        .then(function (response) {
-            // handle success
-            console.log(response.data);
-            window.document.getElementById("content").innerHTML = response.data;
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        });
+
+    setInterval(() => {
+        let config = {
+            headers: {
+                "Cache-Control": "Public"
+            }
+        }
+        axios.get('http://localhost:8080/api/date', config)
+            .then(function (response) {
+                // handle success
+                console.log(response.data);
+                window.document.getElementById("content").innerHTML = response.data;
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            });
+    }, 1000 * 10);
 </script>
 </body>
 </html>
