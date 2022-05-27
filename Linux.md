@@ -34,6 +34,32 @@ df -h
 du -sh /var/*
 ```
 
+### 挂载磁盘
+
+```shell
+# 查看磁盘挂载情况
+lsblk
+
+# 查看磁盘详情
+sudo fdisk -l
+
+# 格式化磁盘 ext4
+sudo mkfs -t ext4 /dev/sdb
+
+# 挂载
+sudo mount /dev/sdb /data
+
+# 获取磁盘的UUID
+sudo blkid /dev/sdb
+
+# 重启自动挂载
+sudo vim /etc/fstab
+# 要填写file system、mount point、type、options、dump、pass等六项。
+# 其中mount point为我们的挂载点/data/；type为我们格式化的文件格式，ext4；options我们一般就是defaults；
+# dump都是0、pass也都是0，除非挂载点是/。
+UUID=38b045ea-0bcd-46dc-b5a2-76917a91d9fe /data/ ext4 defaults 0 0
+```
+
 ## port
 
 ```shell
