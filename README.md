@@ -14,6 +14,22 @@ docker build -t liubin/app .
 docker run --rm -p 8080:8080 --name app -d liubin/app
 ```
 
+## docker stats
+
+```shell
+# stats 命令 --no-stream 参数 可以不显示容器的实时状态
+docker stats --no-stream
+```
+
+| Column name           | Description           |
+|-----------------------|-----------------------|
+| CONTAINER ID and Name |                       |
+| CPU % and MEM %       | 容器正在使用的主机CPU和内存的百分比   |
+| MEM USAGE / LIMIT     | 容器正在使用的总内存以及允许使用的总内存量 |
+| NET I/O               | 容器通过其网络接口发送和接收的总数据量   |
+| BLOCK I/O             | 容器已从主机上的块设备读取和写入的数据量  |
+| PIDs                  | 容器创建的进程或线程数           |
+
 ## docker export
 
 ```shell

@@ -30,6 +30,11 @@ db.book.dropIndex("title_auth_index");
 ### data
 
 ```shell
+# export data
+mongoexport -d mongo -c book -o book.json
+```
+
+```shell
 # import json data
 mongoimport --db liubin --collection youtube_user --jsonArray /liubin_youtobe_user.json
 # import csv file
