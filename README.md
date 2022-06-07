@@ -12,6 +12,15 @@ docker build -t liubin/app .
 ```shell
 # run 命令
 docker run --rm -p 8080:8080 --name app -d liubin/app
+# windows 挂载目录
+docker run --rm -p 8080:8080 --name app -v /d/tmp/zinc/data:/app -d liubin/app
+```
+
+## docker network
+
+```shell
+# network 命令
+docker network create --driver bridge app
 ```
 
 ## docker stats
