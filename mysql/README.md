@@ -4,6 +4,8 @@
 
 - Windows文件到容器中权限`777`，MySQL不会使用配置文件
 - 简单解决：将文件设置 只读
+- MySQL Docker 容器支持在启动时执行初始化脚本，脚本文件复制或挂载到MySQL docker 映像中的/docker-entrypoint-initdb.d/文件夹
+- MySQL docker 容器按文件名升序从/docker-entrypoint-initdb.d/文件夹执行脚本文件 ` "./scripts/schema.sql:/docker-entrypoint-initdb.d/1.sql"`
 
 ## dev
 
@@ -11,7 +13,7 @@
 
 ```sql
 -- delete all data from table
-truncate table table_name;
+TRUNCATE TABLE table_name;
 ```
 
 ## ops
@@ -39,7 +41,7 @@ truncate table table_name;
 
 ```sql
 -- same instance different database
-rename table old_base.old_table to new_base.new_table;
+RENAME TABLE old_base.old_table TO new_base.new_table;
 ```
 
 - dump
