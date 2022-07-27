@@ -49,6 +49,8 @@ RENAME TABLE old_base.old_table TO new_base.new_table;
 ```shell
 # export from old base
 mysqldump -u root -p123456 -h 127.0.0.1 -P 3306 --databases old_base --tables old_table --where "id > 100" > old_table.sql
+# export from docker 
+docker exec some-mysql sh -c 'exec mysqldump --all-databases -uroot -p"$MYSQL_ROOT_PASSWORD"' > /some/path/on/your/host/all-databases.sql
 # import to new base
 mysql -u root -p123456 -h 127.0.0.1 -P 3306 new_base < old_table.sql
 # or into new base

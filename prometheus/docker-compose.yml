@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  prometheus:
+    image: liubin/prometheus
+    build: ./build/prometheus
+    container_name: prometheus
+    command: --config.file /etc/prometheus/prometheus.yml
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: liubin/grafana
+    build: ./build/grafana
+    container_name: grafana
+    command: --config.file /etc/grafana/grafana.ini
+    volumes:
+      - ./config/grafana.ini:/etc/grafana/grafana.ini
+  cadvisor:
+    image: liubin/cadvisor
+    build: ./build/cadvisor
+    container_name: cadvisor
+
+networks:
+  liubin-bridge:
+    external: true
