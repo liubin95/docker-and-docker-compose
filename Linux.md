@@ -76,3 +76,15 @@ ls | grep string
 du -sh ./*/ |sort -rh 
 ```
 
+# systemctl 
+
+```shell
+systemctl enable service
+systemctl disable service
+systemctl start service
+systemctl status service -l
+systemctl stop service
+# show logs 
+journalctl -u service
+```
+
