@@ -65,6 +65,9 @@ UUID=38b045ea-0bcd-46dc-b5a2-76917a91d9fe /data/ ext4 defaults 0 0
 ```shell
 # show port info
 netstat -tunlp
+# netcat
+# 扫描 端口范围
+nc -z -v -w2 -u 127.0.0.1 1-65535
 ```
 
 ## pipeline
