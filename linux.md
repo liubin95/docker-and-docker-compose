@@ -1,6 +1,11 @@
 # Linux
 
-## ram
+## 常用软件
+
+- Blueman Bluetooth Manager `sudo apt install blueman`
+- [vlc video player](https://www.videolan.org/vlc/download-ubuntu.html)
+
+## 内存
 
 ```shell
 # show ram info
@@ -25,7 +30,7 @@ echo 3 > /proc/sys/vm/drop_caches
 > To free slab objects and page cache:<br>
 > echo 3 > /proc/sys/vm/drop_caches
 
-## disk
+## 磁盘
 
 ```shell
 # show disk info
@@ -60,7 +65,7 @@ sudo vim /etc/fstab
 UUID=38b045ea-0bcd-46dc-b5a2-76917a91d9fe /data/ ext4 defaults 0 0
 ```
 
-## port
+## 端口
 
 ```shell
 # show port info
@@ -70,7 +75,7 @@ netstat -tunlp
 nc -z -v -w2 -u 127.0.0.1 1-65535
 ```
 
-## pipeline
+## 管道符
 
 ```shell
 # find string in this directory
@@ -79,7 +84,7 @@ ls | grep string
 du -sh ./*/ |sort -rh 
 ```
 
-# systemctl 
+# systemctl
 
 ```shell
 systemctl enable service
