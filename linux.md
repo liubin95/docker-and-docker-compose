@@ -2,7 +2,7 @@
 
 ## 常用软件
 
-- Blueman Bluetooth Manager `sudo apt install blueman`
+- Blue man Bluetooth Manager `sudo apt install blueman`
 - [vlc video player](https://www.videolan.org/vlc/download-ubuntu.html)
 
 ## 内存
