@@ -51,7 +51,7 @@ services:
     command: --config /etc/mongo/mongod.conf
     volumes:
       - ./config/mongod2.conf:/etc/mongo/mongod.conf
+
 networks:
   default:
-    external:
-      name: liubin-bridge
+    driver: bridge

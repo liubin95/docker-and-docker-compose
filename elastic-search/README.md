@@ -7,7 +7,8 @@
 [https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
 
 - set **vm_max_map_count** to at least 262144
-    - Linux
+  - Linux
+
       ```shell
       # To apply the setting on a live system, run
       sysctl -w vm.max_map_count=262144
@@ -16,7 +17,9 @@
       # then run
       sysctl -p
       ```
-    - windows wsl2
+
+  - windows wsl2
+
       ```shell
       wsl -d docker-desktop
       # then like Linux operating
@@ -70,5 +73,3 @@ docker run elastic/rally esrally race \
  # --pipeline=benchmark-only Rally 不为我们配置集群。
  --pipeline=benchmark-only
 ```
-
-
