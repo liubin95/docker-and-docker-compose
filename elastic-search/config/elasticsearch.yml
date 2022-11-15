@@ -1,6 +1,6 @@
 cluster:
   name: es-cluster
-  initial_master_nodes: [ "es-cluster-node1" ]
+  initial_master_nodes: [ "es-cluster-node1","es-cluster-node2","es-cluster-node3" ]
 node:
   master: true
   data: true
@@ -16,7 +16,7 @@ discovery:
   seed_hosts:
     - es1
   zen:
-    minimum_master_nodes: 1
+    minimum_master_nodes: 2
 bootstrap:
   memory_lock: false
   system_call_filter: false

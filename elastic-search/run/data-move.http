@@ -1,0 +1,60 @@
+### 删除副本 迁移分片到一个节点
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.17/indices-shrink-index.html#_shrinking_an_index
+PUT http://127.0.0.1:9200/test_index/_settings
+Content-Type: application/json
+
+{
+  "settings": {
+    "index.number_of_replicas": 0,
+    "index.routing.allocation.require._name": "es-cluster-node3",
+    "index.blocks.write": true
+  }
+}
+
+### 迁移索引到一个新的索引（三分片到一分片）
+POST http://127.0.0.1:9200/test_index/_shrink/test_index_target
+Content-Type: application/json
+
+{
+  "settings": {
+    "index.number_of_replicas": 0,
+    "index.number_of_shards": 1,
+    "index.routing.allocation.require._name": "es-cluster-node3",
+    "index.blocks.write": null
+  }
+}
+
+### delete index
+DELETE http://127.0.0.1:9200/test_index
+
+### Put the source index in read-only mode
+PUT http://127.0.0.1:9200/test_index_target/_settings
+Content-Type: application/json
+
+{
+  "settings": {
+    "index.blocks.write": "true"
+  }
+}
+
+### Clone the source index to the target name, and set the target to read-write mode
+POST http://127.0.0.1:9200/test_index_target/_clone/test_index
+Content-Type: application/json
+
+{
+  "settings": {
+    "index.number_of_replicas": 0,
+    "index.number_of_shards": 1,
+    "index.blocks.write": null
+  }
+}
+
+### delete index
+DELETE http://127.0.0.1:9200/test_index_target
+
+### 节点退出
+# Add node to voting configuration exclusions list and wait for the system
+# to auto-reconfigure the node out of the voting configuration up to the
+# default timeout of 30 seconds
+POST http://127.0.0.1:9200/_cluster/voting_config_exclusions?node_names=es-cluster-node2
+

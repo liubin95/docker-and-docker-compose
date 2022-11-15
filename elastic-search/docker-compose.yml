@@ -42,5 +42,4 @@ services:
 
 networks:
   default:
-    external:
-      name: liubin-bridge
+    driver: bridge
