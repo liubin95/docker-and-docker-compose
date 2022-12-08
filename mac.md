@@ -30,7 +30,7 @@
 - z 跳转目录 `z code`
 - zsh-syntax-highlighting 语法高亮
 - zsh-autosuggestions 自动补全
-- sublime `st a.java` `st code`
+- vscode `vsc a.java` `vsc code`
 
 #### ohmyzsh 主题
 
@@ -109,8 +109,5 @@ launchctl start com.example.app
 launchctl stop com.example.app
 ```
 
-## AppleScript
-
-### 基本语法
-- 
+## homebrew
 

@@ -1,31 +1,36 @@
 ### create index
+# ignore_pinyin_offset 拼音高亮搜索
+# "term_vector": "with_offsets"
 PUT http://127.0.0.1:9200/test_index
 Content-Type: application/json
 
 {
   "settings": {
     "index": {
-      "number_of_shards": "3",
-      "number_of_replicas": "2",
+      "number_of_shards": "1",
+      "number_of_replicas": "0",
       "analysis": {
         "analyzer": {
-          "ikAnalyzer": {
+          "ikSearchAnalyzer": {
             "type": "custom",
             "tokenizer": "ik_max_word"
           },
-          "pinyinAnalyzer": {
+          "pinyinSimpleIndexAnalyzer": {
             "tokenizer": "pinyin_word"
           }
         },
         "tokenizer": {
           "pinyin_word": {
             "type": "pinyin",
+            "first_letter": "prefix",
+            "padding_char": " ",
             "keep_first_letter": true,
             "keep_separate_first_letter": true,
             "keep_full_pinyin": true,
             "keep_original": false,
             "limit_first_letter_length": 16,
-            "lowercase": true
+            "lowercase": true,
+            "ignore_pinyin_offset": false
           }
         }
       }
@@ -33,29 +38,40 @@ Content-Type: application/json
   },
   "mappings": {
     "properties": {
-      "title": {
+      "name": {
         "type": "text",
-        "analyzer": "ikAnalyzer",
-        "search_analyzer": "ikAnalyzer",
-        "fielddata": true,
+        "analyzer": "ikSearchAnalyzer",
+        "search_analyzer": "ikSearchAnalyzer",
         "fields": {
           "pinyin": {
             "type": "text",
-            "analyzer": "pinyinAnalyzer",
-            "search_analyzer": "pinyinAnalyzer"
+            "analyzer": "pinyinSimpleIndexAnalyzer",
+            "search_analyzer": "pinyinSimpleIndexAnalyzer",
+            "term_vector": "with_offsets"
           }
         }
       },
       "content": {
         "type": "text",
-        "analyzer": "ikAnalyzer",
-        "search_analyzer": "ikAnalyzer"
+        "analyzer": "ikSearchAnalyzer",
+        "search_analyzer": "ikSearchAnalyzer",
+        "fields": {
+          "pinyin": {
+            "type": "text",
+            "analyzer": "pinyinSimpleIndexAnalyzer",
+            "search_analyzer": "pinyinSimpleIndexAnalyzer"
+          }
+        }
       },
-      "category": {
+      "manualPath": {
         "type": "keyword"
       },
-      "likeCount": {
-        "type": "integer"
+      "manualUrl": {
+        "type": "text"
+      },
+      "createTime": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
       }
     }
   }
