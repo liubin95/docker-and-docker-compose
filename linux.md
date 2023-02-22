@@ -70,6 +70,41 @@ echo 3 > /proc/sys/vm/drop_caches
 > To free slab objects and page cache:<br>
 > echo 3 > /proc/sys/vm/drop_caches
 
+## 文件和文件夹
+
+### Linux 常用 文件夹
+
+| 文件夹        | 用途                                                                                                | 备注                            |
+|------------|---------------------------------------------------------------------------------------------------|-------------------------------|
+| /          | 根目录，保持越小越好，效率高，问题少                                                                                |                               |
+| /bin       | 可执行文件，维护模式下可以使用的基础命令（所有用户）                                                                        | centos 已将文件移入/usr/bin。这里是链接   |
+| /boot      | 开机引导。                                                                                             |                               |
+| /dev       | 设备都会以文件的形式存在。/dev/sda 第一块磁盘 等等                                                                    | /dev/null 空设备                 |
+| /etc       | 所有的配置文件，包括系统，和其他服务。                                                                               |                               |
+| /etc/opt   | 保存opt下第三方软件的配置文件                                                                                  |                               |
+| /lib       | 开机时用到的类库                                                                                          | 同/bin，已移入 /usr/lib            |
+| /mnt       | 暂时挂载的设备                                                                                           |                               |
+| /opt       | 第三方软件                                                                                             |                               |
+| /sbin      | 可执行文件，维护模式下可以使用的基础命令（root用户）                                                                      | 同/bin，已移入 /usr/sbin           |
+| /tmp       | 临时文件                                                                                              |                               |
+| /usr       | 系统预设软件。因此这个目录有点类似Windows 系统的『C:\Windows\ (当中的一部份) + C:\Program files\』这两个目录的综合体                   | usr是Unix Software Resource的缩写 |
+| /usr/bin   | 一般用户使用的指令                                                                                         | FHS 要求在此目录下不应该有子目录            |
+| /usr/local | 自行更新的预装软件。保留原来的，新的放置此处                                                                            |                               |
+| /var       | 系统运行是变动的文件。包括缓存(cache)、登录档(log file)以及某些软件运作所产生的文件， 包括程序档案(lock file, run file)，或者例如MySQL资料库的文件等等 |                               |
+| /home      | 用户的home，                                                                                          | cd ~ = cd                     |
+| /lib*      | /lib 不同的格式的二进位函式库，例如 /lib64 64位函数库                                                                |                               |
+| /root      | root用户的home                                                                                       |                               |
+
+> CentOS 7 在目录的编排上与过去的版本不同。比较大的差异在于将许多原本应该要在根目录(/) 里面的目录，将他内部资料全部挪到/usr 里面去，然后进行连结设定！包括底下这些：
+>- /bin --> /usr/bin
+>- /sbin --> /usr/sbin
+>- /lib --> /usr/lib
+>- /lib64 --> /usr/lib64
+>- /var/lock --> /run/lock
+>- /var/run --> /run
+
+![](./image/root-dir.png)
+
 ## 磁盘
 
 ### df
@@ -158,6 +193,9 @@ nc -z -v -w2 -u 127.0.0.1 1-65535
 ls | grep string
 # sort dir by size desc
 du -sh ./*/ |sort -rh 
+# show file 10-20 lines with line number
+cat -n file | sed -n '10,20p'
+cat -n file | head -n 20 | tail -n 10
 ```
 
 # systemctl
