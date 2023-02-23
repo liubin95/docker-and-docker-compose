@@ -176,6 +176,37 @@ sudo vim /etc/fstab
 UUID=38b045ea-0bcd-46dc-b5a2-76917a91d9fe /data/ ext4 defaults 0 0
 ```
 
+### 链接 ln
+
+#### 硬连接
+
+```shell
+# 创建硬连接
+ln file1 file2
+# 查看硬连接数
+ls -l file1
+# 删除硬连接
+rm file2
+```
+
+##### 限制
+
+- 不能跨分区
+- 不能针对目录
+
+#### 软连接
+
+```shell
+# 创建软连接
+ln -s file1 file2
+# 目录
+ln -s /bin /root/bin
+# 查看软连接
+ls -l file2
+# 删除软连接
+rm file2
+```
+
 ## 端口
 
 ```shell
@@ -198,7 +229,7 @@ cat -n file | sed -n '10,20p'
 cat -n file | head -n 20 | tail -n 10
 ```
 
-# systemctl
+## systemctl
 
 ```shell
 systemctl enable service
