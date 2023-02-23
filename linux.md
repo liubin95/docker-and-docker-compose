@@ -217,18 +217,6 @@ netstat -tunlp
 nc -z -v -w2 -u 127.0.0.1 1-65535
 ```
 
-## 管道符
-
-```shell
-# find string in this directory
-ls | grep string
-# sort dir by size desc
-du -sh ./*/ |sort -rh 
-# show file 10-20 lines with line number
-cat -n file | sed -n '10,20p'
-cat -n file | head -n 20 | tail -n 10
-```
-
 ## systemctl
 
 ```shell
@@ -459,6 +447,47 @@ cat > catfile << eof
 > 123
 > 456
 > eof
+```
+
+### 多命令执行
+
+#### cmd;cmd
+
+```shell
+# 顺序执行
+sync; sync; shutdown -h now
+```
+
+#### && ||
+
+```shell
+# && 前面的命令执行成功后才执行后面的命令
+cd /home && ls
+# || 前面的命令执行失败后才执行后面的命令
+cd /notexit || ls
+# 判断目录是否存在，不存在则创建，然后创建文件
+cd /home/test || mkdir -p /home/test && touch /home/test/test.txt
+```
+
+### 管道 pipe
+
+```shell
+# find string in this directory
+ls | grep string
+# sort dir by size desc
+du -sh ./*/ |sort -rh 
+# show file 10-20 lines with line number
+cat -n file | sed -n '10,20p'
+cat -n file | head -n 20 | tail -n 10
+```
+
+#### cut
+
+```shell
+# cut -d 分隔符 -f 列数
+echo $PATH | cut -d ':' -f 1,2
+# cut -c 字符位置
+echo $PATH | cut -c 1-5
 ```
 
 ### 编写shell
