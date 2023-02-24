@@ -34,7 +34,7 @@ renice +10 6919
 - cgroups 命令集
 - [Linux资源管理之cgroups简介](https://tech.meituan.com/2015/03/31/cgroups.html)
 
-> 功能最为强大的控制组（cgroups）的用法。
+> 功能最为强大地控制组（cgroups）的用法。
 > cgroups 是 Linux 内核提供的一种机制，利用它可以指定一组进程的资源分配。
 > 具体来说，使用 cgroups，用户能够限定一组进程的 cpu 占用率、系统内存消耗、网络带宽，以及这几种资源的组合。
 > cgroups 的优势在于它可以控制一组进程，不像前者仅能控制单进程。而 cgroups 则可以限制其他进程资源的使用。
@@ -104,6 +104,10 @@ echo 3 > /proc/sys/vm/drop_caches
 >- /var/run --> /run
 
 ![](./image/root-dir.png)
+
+## 正则和文件处理
+
+### 正则表达式
 
 ## 磁盘
 
@@ -474,6 +478,8 @@ cd /home/test || mkdir -p /home/test && touch /home/test/test.txt
 ```shell
 # find string in this directory
 ls | grep string
+# 排除空行
+grep -v '^$' filename
 # sort dir by size desc
 du -sh ./*/ |sort -rh 
 # show file 10-20 lines with line number
@@ -488,6 +494,99 @@ cat -n file | head -n 20 | tail -n 10
 echo $PATH | cut -d ':' -f 1,2
 # cut -c 字符位置
 echo $PATH | cut -c 1-5
+```
+
+#### sort
+
+```shell
+# sort -r 逆序
+# sort -n 数字排序
+# sort -k 列数
+# sort -t 分隔符
+# sort -u 去重
+# sort -b 忽略前导空格
+# sort -f 忽略大小写
+
+tail -n 10 /etc/passwd | cut -d ':' -f 1,2,3  | sort -t ':' -k 3 -n -r
+```
+
+#### uniq
+
+```shell
+# uniq -c 统计重复行数
+# uniq -i 忽略大小写
+last | cut -d ' ' -f1 | sort | uniq -c
+```
+
+#### wc
+
+```shell
+# wc -l 行数
+# wc -w 单词数
+# wc -c 字符数
+wc index.zsh
+cat /etc/man_db.conf | wc
+# 输出的三个数字中，分别代表： 『行、字数、字元数』
+```
+
+#### tee
+
+```shell
+# tee -a 追加
+# tee 会同时将资料流分送到档案去与萤幕(screen)；而输出到萤幕的，其实就是stdout ，那就可以让下个指令继续处理喔！
+last | tee last.list | cut -d " " -f 1 
+```
+
+#### 文字处理
+
+- `tr` 转换或删除字符
+- `join` 将两个已排序的文件按照相同的字段进行合并。**在使用join 之前，你所需要处理的档案应该要事先经过排序(sort) 处理**
+
+```shell
+# 选项与参数：
+# -t ：join 预设以空白字元分隔资料，并且比对『第一个栏位』的资料，
+#       如果两个档案相同，则将两笔资料联成一行，且第一个栏位放在第一个！
+# -i ：忽略大小写的差异；
+# -1 ：这个是数字的1 ，代表『第一个档案要用那个栏位来分析』的意思；
+# -2 ：代表『第二个档案要用那个栏位来分析』的意思。
+join -t ':' -1 4  -2 3 /etc/passwd /etc/group | tail -n 10
+```
+
+- `paste` 将多个文件的内容按行合并 将两行贴在一起，且中间以[tab] 键隔开
+- `expand` 将制表符转换为空格
+- `unexpand` 将空格转换为制表符
+- `split` 将文件分割成多个小文件
+
+```shell
+# split [OPTION]... [INPUT [PREFIX]]
+# 选项与参数：
+# -b ：指定每个小文件的大小，单位为『块』；
+# -l ：指定每个小文件的大小，单位为『行』；
+split -b 300k /etc/services services # 按照300k分割
+split -l 100 /etc/services services # 按照100行分割
+# 合并
+cat services* > /etc/services
+# 使用ls -al / 输出的资讯中，每十行记录成一个档案
+ls -al / | split -l 10 - ll
+```
+
+- `xargs` 将命令的输出结果作为参数传递给另一个命令
+
+```shell
+# 很多指令其实并不支援管线命令，因此我们可以透过xargs 来提供该指令引用standard input 之用！
+# 选项与参数：
+# -n ：指定每次传递给命令的参数个数；
+# -d ：指定分隔符，默认是以『空白字元』作为分隔符；
+# -p ：指定命令执行前的提示信息；
+# 删除test开头的文件
+ls | grep test | xargs rm -f
+```
+
+- `-` 代表标准输入
+
+```shell
+# 管道命令中代替 filename
+ls -al / | split -l 10 - ll
 ```
 
 ### 编写shell
