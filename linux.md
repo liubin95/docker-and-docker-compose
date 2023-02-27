@@ -109,6 +109,136 @@ echo 3 > /proc/sys/vm/drop_caches
 
 ### 正则表达式
 
+[在线工具](https://c.runoob.com/front-end/854/)
+
+### sed
+
+```shell
+# 选项与参数：
+# -n ：使用安静(silent)模式。在一般sed 的用法中，所有来自STDIN 的资料一般都会被列出到萤幕上。
+      # 但如果加上-n 参数后，则只有经过sed 特殊处理的那一行(或者动作)才会被列出来。
+# -e ：直接在指令列模式上进行sed 的动作编辑；
+# -f ：直接将sed 的动作写在一个档案内， -f filename 则可以执行filename 内的sed 动作；
+# -r ：sed 的动作支援的是延伸型正规表示法的语法。(预设是基础正规表示法语法)
+# -i ：直接修改读取的档案内容，而不是由萤幕输出。
+
+# 动作说明： [n1[,n2]]function
+# n1, n2 ：不见得会存在，一般代表『选择进行动作的行数』，举例来说，如果我的动作
+         # 是需要在10 到20 行之间进行的，则『 10,20[动作行为] 』
+
+# function 有底下这些咚咚：
+# a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)～
+# c ：取代， c 的后面可以接字串，这些字串可以取代n1,n2 之间的行！
+# d ：删除，因为是删除啊，所以d 后面通常不接任何咚咚；
+# i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)；
+# p ：列印，亦即将某个选择的资料印出。通常p 会与参数sed -n 一起运作～
+# s ：取代，可以直接进行取代的工作哩！通常这个s 的动作可以搭配正规表示法！
+      # 例如1,20s/old/new/g 就是啦！
+# 删除2-5行
+sed '2,5d' /etc/hosts
+# 最后一行 $
+sed '$d' /etc/hosts
+# 取代2-5行
+sed '2,5c\new line' /etc/hosts
+# 显示2-5行
+sed -n '2,5p' /etc/hosts
+# 新增一行
+sed '2a\new line' /etc/hosts
+# 新增多行
+sed '2a\new line1 \
+new line2' /etc/hosts
+# sed 's/要被取代的字串/新的字串/g'
+sed 's/old/new/g' /etc/hosts
+ifconfig | grep 'inet 192' | sed 's/netmask.*$//g'|sed 's/inet//g'      
+# 多个操作
+sed -e '4d' -e '6c no six line' /etc/hosts
+```
+
+### printf
+
+```shell
+#选项与参数：
+#关于格式方面的几个特殊样式：
+#       \a 警告声音输出
+#       \b 倒退键(backspace)
+#       \f 清除萤幕(form feed)
+#       \n 输出新的一行
+#       \r 亦即Enter 按键
+#       \t 水平的[tab] 按键
+#       \v 垂直的[tab] 按键
+#       \xNN NN 为两位数的数字，可以转换数字成为字元。
+#关于C 程式语言内，常见的变数格式
+#       %ns 那个n 是数字， s 代表string ，亦即多少个字元；
+#       %ni 那个n 是数字， i 代表integer ，亦即多少整数位数；
+#       %N.nf 那个n 与N 都是数字， f 代表floating (浮点)，如果有小数位数，
+#             假设我共要十个位数，但小数点有两位，即为%10.2f 啰！
+printf '%10s %5i %5i %5i %8.2f \n' $(cat printf.txt | grep -v Name)
+# 上面的格式共分为五个栏位，
+# %10s 代表的是一个长度为10 个字元的字串栏位，
+# %5i 代表的是长度为5 个字元的数字栏位，
+# 至于那个%8.2f 则代表长度为8 个字元的具有小数点的栏位，其中小数点有两个字元宽度。
+```
+
+### awk
+
+```shell
+# awk 主要是处理『每一行的栏位内的资料』，而预设的『栏位的分隔符号为 "空白键" 或"[tab]键" 』！
+# awk '条件类型1{动作1} 条件类型2{动作2} ...' filename
+# 打印第一列 和 第三列
+last -n 5 | awk '{print $1 "\t" $3}'
+# 预设变量
+# $0 代表整行的资料
+# $1 代表第一个栏位的资料
+# NF 代表栏位的总数
+# NR 代表目前的行数
+# FS 代表栏位分隔符号，默认是空白键与[tab]键
+# 设置分隔符
+awk -F: '{print $1 "\t" $3}' /etc/passwd
+awk 'BEGIN{FS=":"} {print $1 "\t" $3}' /etc/passwd
+# 条件判断
+awk -F: '$3 > 277 {print $1 "\t" $3}' /etc/passwd
+# 计算 和 变量
+# Name 1st 2nd 3th
+# VBird 23000 24000 25000
+# DMTsai 21000 20000 23000
+# Bird2 43000 42000 41000
+# awk 的指令间隔：所有awk 的动作，亦即在{} 内的动作，如果有需要多个指令辅助时，可利用分号『;』间隔， 或者直接以[Enter] 按键来隔开每个指令，例如上面的范例中，鸟哥共按了三次[enter] 喔！
+# 与bash shell 的变数不同，在awk 当中，变数可以直接使用，不需加上$ 符号。
+awk 'NR==1{print $0 " total"};NR>=2{sum =$2+$3+$4;print $0" "sum}' pay.txt
+cat regular_express.txt | sed '1d' | awk '{sum=$2+$3+$4+$5;avg=sum/4;print $0" "sum" "avg}'
+```
+
+### diff
+
+```shell
+# diff file1 file2
+#-b ：忽略一行当中，仅有多个空白的差异(例如"about me" 与"about me" 视为相同
+#-B ：忽略空白行的差异。
+#-i ：忽略大小写的不同。
+diff passwd.old passwd.new 
+#4d3    <==左边第四行被删除(d) 掉了，基准是右边的第三行
+#< # Note that this file is consulted directly only when the system is running  <==这边列出左边(<)档案被删除的那一行内容
+#6c5   <==左边第六行被改变(c) 了，基准是右边的第五行
+#< # Open Directory.  <==这边列出左边(<)档案被改变的那一行内容
+#---
+#> new line <==这边列出右边(>)档案被改变的那一行内容
+```
+
+### patch
+
+```shell
+#『将旧的档案升级成为新的档案』时，应该要怎么做呢？其实也不难啦！就是『先比较先旧版本的差异，并将差异档制作成为补丁档，再由补丁档更新旧档案』即可。
+# 选项与参数：
+# -p ：后面可以接『取消几层目录』的意思。
+# -R ：代表还原，将新的档案还原成原来旧的版本。
+# 导出差异文件
+diff -Naur regular_express.txt.old regular_express.txt > txt.patch
+# 升级
+patch -p0 < txt.patch
+# 还原
+patch -p0 -R < txt.patch
+```
+
 ## 磁盘
 
 ### df
