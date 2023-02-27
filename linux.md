@@ -721,7 +721,135 @@ ls -al / | split -l 10 - ll
 
 ### 编写shell
 
+#### 基础语法
+
 ```shell
 #!/bin/bash
+echo "hello world !"
+exit 0
+```
 
+```shell
+#!/bin/zsh
+read -p "please input your name: " name
+# 变量
+echo -e "\n hello $name"
+# 计算
+echo "13*13=$((13*13))"
+exit 0
+```
+
+```shell
+#!/bin/bash
+read -p "filename is :" filename
+# 变量默认值
+filename=${filename:-"default-name"}
+date=$(date +%Y%m%d)
+filename=${filename}-${date}
+touch ${filename}
+exit 0
+```
+
+```shell
+#!/bin/bash
+# cpu 计算。可以模拟cpu高负载。${num} 越大时间越长
+time echo "scale=${num}; 4*a(1)" | bc -lq
+# bc -lq  90.32s user 0.63s system 98% cpu 1:32.68 total
+exit 0
+```
+
+#### sh 和 source 的区别
+
+```shell
+#!/bin/bash
+# sh 和 source 的区别
+# sh 会开启一个子进程，source 不会
+read -p "please input your name: " name
+# sh 运行后 `echo $name` 为空
+# source 运行后 `echo $name` 有值
+exit 0
+```
+
+<table style="margin-left: auto; margin-right: auto;">
+        <tr>
+            <td>
+<img src="image/sh1.png" alt="">
+            </td>
+            <td>
+<img src="image/sh2.png" alt="">
+            </td>
+        </tr>
+</table>
+
+#### 判断
+
+##### test
+
+```shell
+# 1. 关于某个档名的『档案类型』判断，如test -e filename 表示存在否
+# -e 是否存在；-f 是否为普通文件；-d 是否为目录
+test -e /etc/passwd && echo "yes" || echo "no"
+# 2. 关于某个数值的『比较判断』，如test 100 -gt 99 表示『大于』否
+# -eq 等于；-ne 不等于；-gt 大于；-ge 大于等于；-lt 小于；-le 小于等于
+test 100 -gt 99 && echo "yes" || echo "no"
+# 3. 关于某个字符串的『比较判断』，如test "abc" == "abc" 表示『相等』否
+# == 等于；!= 不等于
+test "abc" == "abc" && echo "yes" || echo "no"
+# 4. 关于某个文件的『权限判断』，如test -r filename 表示『可读』否
+# -r 是否可读；-w 是否可写；-x 是否可执行
+test -r /etc/passwd && echo "yes" || echo "no"
+# 5. 多重判断
+# -a 与；-o 或；! 非
+test -e /etc/passwd -a -r /etc/passwd && echo "yes" || echo "no"
+```
+
+```shell
+#!/bin/bash
+# 这个档案是否存在，若不存在则给予一个『Filename does not exist』的讯息，并中断程式；
+# 若这个档案存在，则判断他是个档案或目录，结果输出『Filename is regular file』或 『Filename is directory』
+# 判断一下，执行者的身份对这个档案或目录所拥有的权限，并输出权限资料！
+read -p "input filename :" filename
+test -z $filename && echo "you must input a filename." && exit 0
+test ! -e $filename && echo "the filename '$filename' DO NOT exist" && exit 0
+test -f $filename && filetype="regular file"
+test -d $filename && filetype="directory"
+test -r $filename && perm="readable"
+test -w $filename && perm="$perm writable"
+test -x $filename && perm="$perm executable"
+echo "the filename: $filename is a $filetype perm is $perm"
+```
+
+##### []
+
+```shell
+#!/bin/bash
+# 在中括号[] 内的每个元件都需要有空白键来分隔；
+# 在中括号内的变数，最好都以双引号括号起来；
+# 在中括号内的常数，最好都以单或双引号括号起来。
+
+
+# 当执行一个程式的时候，这个程式会让使用者选择Y 或N ，
+# 如果使用者输入Y 或y 时，就显示『 OK, continue 』
+# 如果使用者输入n 或N 时，就显示『 Oh, interrupt ！』
+# 如果不是Y/y/N/n 之内的其他字元，就显示『 I don't know what your choice is 』
+read -p "please input (Y/N):" yn
+[ "$yn" == "Y" -o "$yn" == "y" ] && echo "OK, continue" && exit 0
+[ "$yn" == "N" -o "$yn" == "n" ] && echo "Oh,interrupt" && exit 0
+echo "I don't know what your choice is"
+```
+
+#### 预设变量
+
+```shell
+#!/bin/bash
+# /path/to/scriptname opt1 opt2 opt3 opt4
+# $0 $1 $2 $3 $4
+# $# 传递给脚本的参数个数 4
+# $@ 传递给脚本的所有参数 "opt1" "opt2" "opt3" "opt4"
+# $* "opt1 opt2 opt3 opt4" c为分隔字元，预设为空白键
+echo "script name is $0"
+echo "$#"
+echo "$@"
+echo "$*"
+exit 0
 ```
