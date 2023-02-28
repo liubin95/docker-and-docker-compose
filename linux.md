@@ -801,6 +801,9 @@ test -r /etc/passwd && echo "yes" || echo "no"
 # 5. 多重判断
 # -a 与；-o 或；! 非
 test -e /etc/passwd -a -r /etc/passwd && echo "yes" || echo "no"
+# 6.正则表达式判断
+# =~ 匹配
+test "abc" =~ "a" && echo "yes" || echo "no"
 ```
 
 ```shell
@@ -836,6 +839,37 @@ read -p "please input (Y/N):" yn
 [ "$yn" == "Y" -o "$yn" == "y" ] && echo "OK, continue" && exit 0
 [ "$yn" == "N" -o "$yn" == "n" ] && echo "Oh,interrupt" && exit 0
 echo "I don't know what your choice is"
+exit 0
+```
+
+##### if
+
+```shell
+#!/bin/bash
+read -p "please input (Y/N):" yn
+
+if [ "$yn" == "Y" ] || [ "$yn" == "y" ]; then
+    echo "OK, continue"
+elif [ "$yn" == "N" ] || [ "$yn" == "n" ]; then
+    echo "Oh,interrupt"
+else 
+    echo "I don't know what your choice is"
+fi
+exit 0
+```
+
+##### case
+
+```shell
+#!/bin/bash
+# case 语句可以匹配一个值与一个模式，如果匹配成功，那么执行相匹配的命令。
+read -p "please input (Y/N):" yn
+case "$yn" in
+[Yy]) echo "OK, continue" ;;
+[Nn]) echo "Oh,interrupt" ;;
+*) echo "I don't know what your choice is" ;;
+esac
+exit 0
 ```
 
 #### 预设变量
@@ -851,5 +885,102 @@ echo "script name is $0"
 echo "$#"
 echo "$@"
 echo "$*"
+exit 0
+```
+
+#### function
+
+```shell
+#!/bin/bash
+# function
+# [function] function_name() { commands; }
+# 因此在shell script 当中的function 的设定一定要在程式的最前面
+# 参数 $1 $2 $3 $4 
+# $0 方法名
+function print_text() {
+    echo -n "text is $1"
+}
+print_text "function_name"
+exit 0
+```
+
+#### 循环
+
+##### while/until
+
+```shell
+#!/bin/bash
+# 输入yes 程序停止
+#『当condition 条件成立时，就进行循环，直到condition 的条件不成立才停止』
+while [ "$yn" != "yes" ]; do
+    read -p "input yes to stop:" yn
+done
+# 『当condition 条件成立时，就终止循环， 否则就持续进行循环的程式段。』
+until [ "$yn" == "yes" ]; do
+    read -p "input yes to stop:" yn    
+done
+exit 0
+```
+
+##### for
+
+```shell
+#!/bin/bash
+
+# 列表
+for var in dog cat elephant ; do
+    echo "There are ${var}s.... "
+done
+for file in $(ls) ; do
+    echo "file is $file"
+done
+
+# 数字 或者字母
+#  {a..g} 代表 a b c d e f g
+sum=0
+for i in {1..5} ; do
+    sum=$(($sum+$i))
+done
+echo "sum is $sum"
+
+# 
+for (( i = 0; i < n; i++ )); do
+    echo "i is $i"
+done
+
+# 读取文件
+for i in $(cat /etc/passwd); do
+    echo $i
+done
+
+exit 0
+```
+
+#### sh
+
+```shell
+#!/bin/bash
+# sh
+# sh -x scriptname # 执行脚本并打印出每一行的命令 debug
+# sh -n scriptname # 检查脚本的语法是否正确
+# sh -v scriptname # 执行脚本并打印出每一行的命令 
+```
+
+```shell
+#!/bin/bash
+# 还有几天过生日
+read -p "input your birthday (1119):" birthday
+#todo check
+
+# 计算
+year=$(date +%Y)
+birthday="$year$birthday"
+birthday=$(date -date=$birthday +%s)
+now=$(date +%s)
+if [ "$birthday" -lt "$now" ];then
+birthday=$(($birthday+(365*24*3600)))
+fi
+days=$((($birthday-$now)/3600/24))
+echo "you still have $days days to your birthday"
 exit 0
 ```
