@@ -610,6 +610,8 @@ cd /home/test || mkdir -p /home/test && touch /home/test/test.txt
 ls | grep string
 # 排除空行
 grep -v '^$' filename
+# grep 正则
+grep -E '^[0-9]+$' filename
 # sort dir by size desc
 du -sh ./*/ |sort -rh 
 # show file 10-20 lines with line number
@@ -964,23 +966,4 @@ exit 0
 # sh -x scriptname # 执行脚本并打印出每一行的命令 debug
 # sh -n scriptname # 检查脚本的语法是否正确
 # sh -v scriptname # 执行脚本并打印出每一行的命令 
-```
-
-```shell
-#!/bin/bash
-# 还有几天过生日
-read -p "input your birthday (1119):" birthday
-#todo check
-
-# 计算
-year=$(date +%Y)
-birthday="$year$birthday"
-birthday=$(date -date=$birthday +%s)
-now=$(date +%s)
-if [ "$birthday" -lt "$now" ];then
-birthday=$(($birthday+(365*24*3600)))
-fi
-days=$((($birthday-$now)/3600/24))
-echo "you still have $days days to your birthday"
-exit 0
 ```
