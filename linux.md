@@ -96,6 +96,7 @@ echo 3 > /proc/sys/vm/drop_caches
 | /root      | root用户的home                                                                                       |                               |
 
 > CentOS 7 在目录的编排上与过去的版本不同。比较大的差异在于将许多原本应该要在根目录(/) 里面的目录，将他内部资料全部挪到/usr 里面去，然后进行连结设定！包括底下这些：
+>
 >- /bin --> /usr/bin
 >- /sbin --> /usr/sbin
 >- /lib --> /usr/lib
@@ -966,4 +967,17 @@ exit 0
 # sh -x scriptname # 执行脚本并打印出每一行的命令 debug
 # sh -n scriptname # 检查脚本的语法是否正确
 # sh -v scriptname # 执行脚本并打印出每一行的命令 
+```
+
+## user and group
+
+### uid and gid
+
+> 一个是使用者 ID (User ID ，简称UID)、一个是群组ID (Group ID ，简称GID)。
+
+```shell
+# id  
+id liubin
+# uid=501(liubin) gid=20(staff) groups=20(staff),12(everyone),61(localaccounts),79(_appserverusr),80(admin),81(_appserveradm),98(_lpadmin),701(com.apple.sharepoint.group.1),33(_appstore),100(_lpoperator),204(_developer),250(_analyticsusers),395(com.apple.access_ftp),398(com.apple.access_screensharing),399(com.apple.access_ssh),400(com.apple.access_remote_ae)
+# 用户属于多个组
 ```
