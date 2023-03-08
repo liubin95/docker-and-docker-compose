@@ -1062,9 +1062,10 @@ useradd -m -g users -G wheel -s /bin/bash dmtsai
 userdel -r dmtsai
 # -r 删除用户的同时，删除用户的家目录
 usermod -g users -G wheel -s /bin/bash dmtsai
-# 同上
-passwd dmtsai
 # 修改用户密码
+passwd dmtsai
+# 要求用户修改密码
+chage -d 0 agetest 
 ```
 
 ## ACL
@@ -1127,4 +1128,66 @@ sudo -u dmtsai -s
 # -s 切换到dmtsai用户并加载用户的环境变量
 sudo -u dmtsai -s -c "ls -l"
 # -c 执行命令
+```
+
+## 定时任务
+
+### at
+
+```shell
+at 10:00
+# 10:00执行
+at now + 1 [minutes|hour|day]
+# -m 当at 的工作完成后，即使没有输出讯息，亦以email 通知使用者该工作已完成。
+# -l ：at -l 相当于atq，列出目前系统上面的所有该使用者的at 排程；
+# -d ：at -d 相当于atrm，删除目前系统上面的某个at 排程；
+# -c ：at -c 相当于at -l -v，列出目前系统上面的所有该使用者的at 排程，并且显示详细的内容；
+# 建议你最好使用绝对路径来下达你的指令，比较不会有问题喔！
+batch 
+# batch 神奇的地方在于：他会在CPU 的工作负载小于0.8 的时候，才进行你所下达的工作任务啦
+# 没参数，直接写任务
+```
+
+### cron
+
+- 个人化的行为使用` crontab -e `：如果你是依据个人需求来建立的例行工作排程，建议直接使用crontab -e 来建立你的工作排程较佳！这样也能保障你的指令行为不会被大家看到(/etc/crontab 是大家都能读取的权限喔！)；
+- 系统维护管理使用` vim /etc/crontab `：如果你这个例行工作排程是系统的重要工作，为了让自己管理方便，同时容易追踪，建议直接写入/etc/crontab 较佳！
+- 指令下达时，最好使用绝对路径，这样比较不会找不到执行档喔！
+- 不可使用`几月几号且为星期几`的模式工作
+
+```shell
+# crontab [-u username] [-l|-e|-r]
+# 选项与参数：
+# -u ：只有root 才能进行这个任务，亦即帮其他使用者建立/移除crontab 工作排程；
+# -e ：编辑crontab 的工作内容
+# -l ：查阅crontab 的工作内容
+# -r ：移除所有的crontab 的工作内容，若仅要移除一项，请用-e 去编辑。
+
+# 每天12点发送邮件
+0 12 * * * mail -s "at 12:00 from .bash_history" liubin < /home/liubin/.bash_history
+
+# 时间格式
+# 分钟 小时 日期 月份 星期 命令
+# * 任意值
+# */2 每2个单位
+# 1,2,3,4,5 1到5
+# 1-5 1到5
+# 1-5/2 1到5每2个单位
+```
+
+### anacron
+
+```shell
+# 在处理非24 小时一直启动的Linux 系统的crontab 的执行！以及因为某些原因导致的超过时间而没有被执行的排程工作。
+# 由于anacron 预设会以一天、七天、一个月为期去侦测系统未进行的crontab 任务
+# anacron 配合/etc/anacrontab 的设定，可以唤醒停机期间系统未进行的crontab 任务！
+# anacron [-sfn] [job].. 
+# anacron -u [job]..
+# 选项与参数：
+# -s ：开始一连续的执行各项工作(job)，会依据时间记录档的资料判断是否进行；
+# -f ：强制进行，而不去判断时间记录档的时间戳记；
+# -n ：立刻进行未进行的任务，而不延迟(delay) 等待时间；
+# -u ：仅更新时间记录档的时间戳记，不进行任何工作。
+# job ：由/etc/anacrontab 定义的各项工作名称。
+anacron -s
 ```
