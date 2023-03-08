@@ -1070,3 +1070,61 @@ passwd dmtsai
 ## ACL
 
 > ACL (Access Control List) 是一种访问控制机制，它允许用户或者群组对文件或者目录进行读、写、执行的权限控制，而不是简单的允许或者禁止。<br>
+
+### getfacl
+
+```shell
+getfacl /etc/passwd
+# file: etc/passwd
+# owner: root
+# group: wheel
+# user::rw-
+# group::r--
+# other::r--
+```
+
+### setfacl
+
+```shell
+setfacl -m u:admin:rw info.log.gz
+# -m 修改权限
+    # u:dmtsai:rw 用户dmtsai的权限为读写
+    # g:users:rw 群组users的权限为读写
+    # m:r 其他用户的权限为读
+    # d:u:admin:rx 预设权限
+# -b 删除权限
+# -R 递归修改
+getfacl info.log.gz
+# file: info.log.gz
+# owner: admin
+# group: admin
+# user::rw-
+# user:admin:rw-
+# group::rw-
+# mask::rw-
+# other::r--
+setfacl -mm:r info.log.gz
+```
+
+## su and sudo
+
+### su
+
+```shell
+su - dmtsai
+# - 切换到dmtsai用户
+# -l 切换到dmtsai用户并加载用户的环境变量 等于 -
+# -c 执行命令
+su -c "ls -l" dmtsai
+```
+
+### sudo
+
+```shell
+sudo -u dmtsai ls -l
+# -u 切换到dmtsai用户
+sudo -u dmtsai -s
+# -s 切换到dmtsai用户并加载用户的环境变量
+sudo -u dmtsai -s -c "ls -l"
+# -c 执行命令
+```
