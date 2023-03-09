@@ -28,8 +28,8 @@
 
 - extract 解压缩 `x a.zip`
 - z 跳转目录 `z code`
-- zsh-syntax-highlighting 语法高亮
-- zsh-autosuggestions 自动补全
+- [zsh-syntax-highlighting 语法高亮](https://github.com/zsh-users/zsh-syntax-highlighting)
+- [zsh-autosuggestions 自动补全](https://github.com/zsh-users/zsh-autosuggestions)
 - vscode `vsc a.java` `vsc code`
 
 #### ohmyzsh 主题
