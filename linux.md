@@ -1062,6 +1062,7 @@ useradd -m -g users -G wheel -s /bin/bash dmtsai
 userdel -r dmtsai
 # -r 删除用户的同时，删除用户的家目录
 usermod -g users -G wheel -s /bin/bash dmtsai
+# -a 附加群组
 # 修改用户密码
 passwd dmtsai
 # 要求用户修改密码
@@ -1191,3 +1192,126 @@ batch
 # job ：由/etc/anacrontab 定义的各项工作名称。
 anacron -s
 ```
+
+## 程序管理
+
+> 触发任何一个事件时，系统都会将他定义成为一个程序，并且给予这个程序一个 ID ，称为PID，同时依据启发这个程序的使用者与相关属性关系，给予这个PID 一组有效的权限设定。
+
+### 程序 program
+
+> 硬盘中的程序，例如 nginx
+
+```shell
+# 查找nginx
+whereis nginx
+```
+
+### 进程 process
+
+> 运行中的程序，例如 nginx pid 为 1234
+
+```shell
+# 查看nginx进程
+ps -ef | grep nginx
+```
+
+#### 后台运行
+
+```shell
+# 复制文件
+# 放入背景的工作是不可以使用[ctrl]+c 来终止的 
+cp /etc/passwd /tmp/passwd &
+# [1] 4404 [job number] pid
+# [1]+  Done                    cp /etc/passwd /tmp/passwd
+
+# 输出重定向 
+cp /etc/passwd /tmp/passwd > /tmp/cp.log 2>&1  &
+```
+
+#### 后台暂停
+
+```shell
+# 暂停
+# [ctrl]+z
+# [1]  - suspended  vim main.py
+# [2]  + suspended  vim Dockerfile
+# 那个+ 代表最近一个被丢进背景的工作
+```
+
+#### jobs
+
+```shell
+# 查看后台任务
+jobs
+# [1]  - suspended  vim main.py
+# [2]  + suspended  vim Dockerfile
+# -l 详细信息
+# -p 只显示pid
+```
+
+#### fg
+
+```shell
+# 将后台任务放入前台
+fg %1
+```
+
+#### bg
+
+```shell
+# 将后台任务开始
+# 那个[ctrl]-z 可以将目前的工作丢到背景底下去『暂停』， 那么如何让一个工作在背景底下『 Run 』呢？这时候就要用到bg 了！
+bg %1
+```
+
+#### ps
+
+```shell
+# 当前用户进程
+ps -l
+# 所有用户进程
+ps aux
+```
+
+#### kill
+
+```shell
+# 杀死进程
+kill -9 1234
+# kill -signal pid|%job
+  # -2 ：代表与由键盘输入[ctrl]-c 同样的动作；
+  # -9 ：立刻强制删除一个工作；
+  # -15：以正常的程序方式终止一项工作。与-9 是不一样的。
+# 少用-9  
+```
+
+#### nohup
+
+```shell
+# & 的方式放到背景, 会因为终端关闭而关闭。
+# nohup 的方式放到背景, 不会因为终端关闭而关闭。
+nohup ./sleep500.sh &
+# [1] 5276  [job number] pid
+# nohup: ignoring input and appending output to 'nohup.out'
+# 讯息的输出就会被导向『 ~/nohup.out 』这个档案中去！
+```
+
+### 服务 daemon
+
+> 一种特殊的进程，一般是长期运行的进程，例如 sshd。一般daemon 类型的程式都会加上d 在档名后头～包括伺服器篇我们会看到的httpd, vsftpd 等等都
+
+```shell
+# 查看sshd服务
+ps -ef | grep sshd
+
+```
+
+## 多人多工
+
+### 多人
+
+> 多人是指多个用户同时登录系统，每个用户都可以执行自己的任务，而且不会影响到其他用户的任务。
+
+### 多工
+
+> 多工是指一个用户可以同时执行多个任务，而且不会影响到其他任务的执行。
