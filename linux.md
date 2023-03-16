@@ -1374,7 +1374,23 @@ nohup ./sleep500.sh &
 # [1] 5276  [job number] pid
 # nohup: ignoring input and appending output to 'nohup.out'
 # 讯息的输出就会被导向『 ~/nohup.out 』这个档案中去！
-nohup java -jar /home/liubin/soft/jenkins.war > /home/liubin/soft/jenkins.log 2>&1 &
+nohup java -jar /home/liubin/soft/jenkins.jar > /home/liubin/soft/jenkins.log 2>&1 &
+```
+
+#### nice
+
+- nice 值可调整的范围为-20 ~ 19 ；
+- root 可随意调整自己或他人程序的Nice 值，且范围为-20 ~ 19 ；
+- 一般使用者仅可调整自己程序的Nice 值，且范围仅为0 ~ 19 (避免一般用户抢占系统资源)；
+- 一般使用者仅可将nice 值越调越高，例如本来nice 为5 ，则未来仅能调整到大于5；
+
+<img src="./image/nice1.png" alt="">
+
+```shell
+# nice [-n 数字] command
+nice -n 10 sleep 500
+# renice [number] PID
+renice 10 1234
 ```
 
 ### 服务 daemon
