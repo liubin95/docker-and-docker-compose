@@ -345,10 +345,19 @@ ls -l file2
 rm file2
 ```
 
-## 端口
+## 网络
+
+### 端口
 
 ```shell
 # show port info
+# 选项与参数：
+# -a ：将目前系统上所有的连线、监听、Socket 资料都列出来
+# -t ：列出tcp 网路封包的资料
+# -u ：列出udp 网路封包的资料
+# -n ：不以程序的服务名称，以埠号(port number) 来显示；
+# -l ：列出目前正在网路监听(listen) 的服务；
+# -p ：列出该网路服务的程序PID
 netstat -tunlp
 # netcat
 # 扫描 端口范围
@@ -1274,6 +1283,8 @@ bg %1
 ps -l
 # 所有用户进程
 ps aux
+# -T 线程信息
+ps -T -p pid
 ```
 
 `ps aux` 返回值
@@ -1314,7 +1325,9 @@ ps aux
 	# r ：给予某个PID 重新制订一个nice 值。
 	# q ：离开top 软体的按键。
 top -b -n 2 > top.log
-top -d 2 -p 14836	
+top -d 2 -p 14836
+# -H 现实线程
+top -H -p pid	
 ```
 
 `top` 返回值
@@ -1392,6 +1405,38 @@ nice -n 10 sleep 500
 # renice [number] PID
 renice 10 1234
 ```
+
+#### proc 文件夹
+
+> 我们之前提到的所谓的程序都是在记忆体当中嘛！而记忆体当中的资料又都是写入到 /proc/* 这个目录下的，所以啰，我们当然可以直接观察/proc 这个目录当中的档案啊！
+
+| 档名                | 档案内容                                         |
+|-------------------|----------------------------------------------|
+| /proc/cmdline     | 载入kernel 时所下达的相关指令与参数！查阅此档案，可了解指令是如何启动的！     |
+| /proc/cpuinfo     | 本机的CPU 的相关资讯，包含时脉、类型与运算功能等                   |
+| /proc/devices     | 这个档案记录了系统各个主要装置的主要装置代号，与 mknod有关呢！           |
+| /proc/filesystems | 目前系统已经载入的档案系统啰！                              |
+| /proc/interrupts  | 目前系统上面的IRQ 分配状态。                             |
+| /proc/ioports     | 目前系统上面各个装置所配置的I/O 位址。                        |
+| /proc/kcore       | 这个就是记忆体的大小啦！好大对吧！但是不要读他啦！                    |
+| /proc/loadavg     | 还记得top以及uptime 吧？没错！上头的三个平均数值就是记录在此！         |
+| /proc/meminfo     | 使用free列出的记忆体资讯，嘿嘿！在这里也能够查阅到！                 |
+| /proc/modules     | 目前我们的Linux 已经载入的模组列表，也可以想成是驱动程式啦！            |
+| /proc/mounts      | 系统已经挂载的资料，就是用mount 这个指令呼叫出来的资料啦！             |
+| /proc/swaps       | 到底系统挂载入的记忆体在哪里？呵呵！使用掉的partition 就记录在此啦！      |
+| /proc/partitions  | 使用fdisk -l 会出现目前所有的partition 吧？在这个档案当中也有纪录喔！ |
+| /proc/uptime      | 就是用uptime 的时候，会出现的资讯啦！                       |
+| /proc/version     | 核心的版本，就是用uname -a 显示的内容啦！                    |
+| /proc/bus/*       | 一些汇流排的装置，还有USB 的装置也记录在此喔！                    |
+
+##### /proc/[pid]
+
+| 文件名     | 文件内容          |
+|---------|---------------|
+| cmdline | 包含进程的完整命令行信息。 |
+| comm    | 包含进程的命令名      |
+| environ | 进程的环境变量       |
+| limits  | 当前进程的资源限制     |
 
 ### 服务 daemon
 
