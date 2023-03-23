@@ -1,10 +1,12 @@
 # coding=utf-8
 import re
-import requests
 import time
-from fastapi import FastAPI, Header, Request
-from fastapi.responses import JSONResponse
 from typing import Union
+
+import requests
+from fastapi import FastAPI, Header, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 
 def get_city(_latitude, _longitude, key):
@@ -61,7 +63,13 @@ def get_weather_main(latitude, longitude, key):
 
 
 app = FastAPI(docs_url=None, redoc_url=None)
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # 为app增加接口处理耗时的响应头信息
 @app.middleware("http")
