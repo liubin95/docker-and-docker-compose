@@ -70,11 +70,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # 为app增加接口处理耗时的响应头信息
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
     authority = request.headers.get("authority")
-    if not authority:
+    # 没有 authority 请求头 并且 不是 OPTIONS 则返回 403
+    if not authority and request.method != "OPTIONS":
         return JSONResponse(status_code=403, content={"msg": "请提供authority"})
     start_time = time.time()
     response = await call_next(request)
