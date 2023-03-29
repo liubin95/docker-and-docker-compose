@@ -19,6 +19,8 @@ TRUNCATE TABLE table_name;
 ## ops
 
 - show mysql running processlist `show processlist;`
+- `select * from information_schema.processlist;`
+- `select * from performance_schema.threads;`
 - kill process `kill id;`
 
 | Id  | User | Host             | db   | Command | Time | State                           | Info                                                                                     |
@@ -34,6 +36,11 @@ TRUNCATE TABLE table_name;
 | trx\_id         | trx\_state | trx\_started        | trx\_requested\_lock\_id | trx\_wait\_started | trx\_weight | trx\_mysql\_thread\_id | trx\_query | trx\_operation\_state | trx\_tables\_in\_use | trx\_tables\_locked | trx\_lock\_structs | trx\_lock\_memory\_bytes | trx\_rows\_locked | trx\_rows\_modified | trx\_concurrency\_tickets | trx\_isolation\_level | trx\_unique\_checks | trx\_foreign\_key\_checks | trx\_last\_foreign\_key\_error | trx\_adaptive\_hash\_latched | trx\_adaptive\_hash\_timeout | trx\_is\_read\_only | trx\_autocommit\_non\_locking | trx\_schedule\_weight |
 |:----------------|:-----------|:--------------------|:-------------------------|:-------------------|:------------|:-----------------------|:-----------|:----------------------|:---------------------|:--------------------|:-------------------|:-------------------------|:------------------|:--------------------|:--------------------------|:----------------------|:--------------------|:--------------------------|:-------------------------------|:-----------------------------|:-----------------------------|:--------------------|:------------------------------|:----------------------|
 | 421573637730304 | RUNNING    | 2022-04-07 14:57:00 | NULL                     | NULL               | 0           | 27                     | NULL       | NULL                  | 0                    | 0                   | 0                  | 1128                     | 0                 | 0                   | 0                         | REPEATABLE READ       | 1                   | 1                         | NULL                           | 0                            | 0                            | 0                   | 0                             | NULL                  |
+
+### 线程对应关系
+
+- `threads.thread_os_id` 对应 系统的线程ID
+- 使用docker部署会有差异，容器没有ps命令，没法获取系统线程ID。`docker top name aux -T`获取的线程ID对应不上
 
 ### data migrate
 
