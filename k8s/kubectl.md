@@ -22,3 +22,17 @@ kubectl get pods -o wide -n kube-flannel
 # 查看pod的日志
 kubectl logs -f pod-name -n kube-flannel
 ```
+
+## kubectl run
+
+```shell
+kubectl run busybox2 --image=busybox --restart=Never -- sleep 3600
+
+```
+
+## kubectl describe
+
+```shell
+kubectl describe pod -n kube-system coredns-5d78c9869d-9dw9h
+
+```
