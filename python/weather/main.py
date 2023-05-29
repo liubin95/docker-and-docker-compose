@@ -77,7 +77,7 @@ app.add_middleware(
 async def add_process_time_header(request: Request, call_next):
     authority = request.headers.get("authority")
     # 没有 authority 请求头 并且 不是 OPTIONS 则返回 403
-    if not authority and request.method != "OPTIONS":
+    if not authority and request.method != "OPTIONS" and request.url.path != "/daily":
         return JSONResponse(status_code=403, content={"msg": "请提供authority"})
     start_time = time.time()
     response = await call_next(request)
@@ -92,8 +92,8 @@ async def add_process_time_header(request: Request, call_next):
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/index",response_class=HTMLResponse)
-def index():
+@app.get("/daily",response_class=HTMLResponse)
+def daily():
     # 获取图片
     res_bing = requests.get("https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-cn")
     res_bing = res_bing.json()
