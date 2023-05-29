@@ -39,6 +39,13 @@ docker stats --no-stream
 | BLOCK I/O             | 容器已从主机上的块设备读取和写入的数据量  |
 | PIDs                  | 容器创建的进程或线程数           |
 
+## docker system
+
+```shell
+# show docker info
+docker system df -v
+```
+
 ## docker export
 
 ```shell
