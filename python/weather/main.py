@@ -7,6 +7,7 @@ import requests
 from fastapi import FastAPI, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse
 
 
 def get_city(_latitude, _longitude, key):
@@ -91,6 +92,29 @@ async def add_process_time_header(request: Request, call_next):
 def read_root():
     return {"Hello": "World"}
 
+@app.get("/index",response_class=HTMLResponse)
+def index():
+    # 获取图片
+    res_bing = requests.get("https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-cn")
+    res_bing = res_bing.json()
+    img_url = "https://cn.bing.com" + res_bing['images'][0]['url']
+    img_title = res_bing['images'][0]['title']
+    img_copyright = res_bing['images'][0]['copyright'] 
+    return f"""
+    <html prefix="og: https://ogp.me/ns#">
+        <head>
+            <title>每日一图</title>
+            <meta property="og:title" content="{img_title}" />
+            <meta property="og:image" content="{img_url}" />
+            <meta property="og:site_name" content="bigThree" />
+            <meta property="og:description" content="{img_copyright}" />
+        </head>
+        <body>
+            <h1 style="text-align: center;">{img_title}</h1>
+            <img src="{img_url}"  />
+        </body>
+    </html>
+    """
 
 @app.get("/weather/{latitude}/{longitude}")
 def weather(latitude: str,
