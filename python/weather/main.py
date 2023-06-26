@@ -77,7 +77,7 @@ app.add_middleware(
 async def add_process_time_header(request: Request, call_next):
     authority = request.headers.get("authority")
     # 没有 authority 请求头 并且 不是 OPTIONS 则返回 403
-    if not authority and request.method != "OPTIONS" and request.url.path != "/daily":
+    if not authority and request.method != "OPTIONS":
         return JSONResponse(status_code=403, content={"msg": "请提供authority"})
     start_time = time.time()
     response = await call_next(request)
@@ -100,7 +100,7 @@ def daily():
     img_url = "https://cn.bing.com" + res_bing['images'][0]['url']
     img_title = res_bing['images'][0]['title']
     img_copyright = res_bing['images'][0]['copyright'] 
-    return JSONResponse(status_code=403, content={"url": img_url,"title":img_title,"copyright":img_copyright})
+    return JSONResponse(status_code=200, content={"url": img_url,"title":img_title,"copyright":img_copyright})
 
 @app.get("/weather/{latitude}/{longitude}")
 def weather(latitude: str,
