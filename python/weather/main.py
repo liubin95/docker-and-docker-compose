@@ -87,7 +87,7 @@ async def add_process_time_header(request: Request, call_next):
     response.headers["X-Process-Time"] = str(process_time)
     return response
 
-
+i
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
@@ -100,21 +100,7 @@ def daily():
     img_url = "https://cn.bing.com" + res_bing['images'][0]['url']
     img_title = res_bing['images'][0]['title']
     img_copyright = res_bing['images'][0]['copyright'] 
-    return f"""
-    <html prefix="og: https://ogp.me/ns#">
-        <head>
-            <title>每日一图</title>
-            <meta property="og:title" content="{img_title}" />
-            <meta property="og:image" content="{img_url}" />
-            <meta property="og:site_name" content="bigThree" />
-            <meta property="og:description" content="{img_copyright}" />
-        </head>
-        <body>
-            <h1 style="text-align: center;">{img_title}</h1>
-            <img src="{img_url}"  />
-        </body>
-    </html>
-    """
+    return JSONResponse(status_code=403, content={"url": img_url,"title":img_title,"copyright":img_copyright})
 
 @app.get("/weather/{latitude}/{longitude}")
 def weather(latitude: str,
