@@ -1,13 +1,10 @@
 import time
 
 import requests
-from fastapi import FastAPI
-from parsel import Selector
-from starlette.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Header, Request
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fastapi.responses import HTMLResponse
+from parsel import Selector
 
 
 def _zaobao():
