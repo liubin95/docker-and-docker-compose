@@ -1,0 +1,17 @@
+[[source]]
+#url = "https://pypi.tuna.tsing/hua.edu.cn/simple"
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "==2.31.0"
+parsel = "==1.8.1"
+uvicorn = {extras = ["standard"], version = "==0.20.0"}
+fastapi = "==0.93.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
+python_full_version = "3.9.6"
