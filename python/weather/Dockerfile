@@ -7,4 +7,4 @@ RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r /tmp/requirements
 COPY .. /app
 WORKDIR /app
 # 启动
-CMD ["uvicorn" ,"main:app","--host", "0.0.0.0", "--reload"]
+CMD ["uvicorn" ,"main:app","--host", "0.0.0.0"]
