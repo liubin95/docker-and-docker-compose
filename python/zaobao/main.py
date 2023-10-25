@@ -87,14 +87,14 @@ def build_markdown():
         autoescape=select_autoescape()
     )
     date = time.strftime("%Y年%m月%d日", time.localtime())
-    template = env.get_template("zaobao.template.jinja")
-    res = template.render(zaobao_list=daily_news(), daily=daily_image(), date=date)
+    template = env.get_template("daily.jinja")
+    res = template.render(news_list=daily_news(), image=daily_image(), date=date)
     return res
 
 
 def dingding_robot(msg):
-    sign = get_sign()
-    url = f"https://oapi.dingtalk.com/robot/send?access_token={os.getenv('DINGDING_TOKEN')}&timestamp={sign[0]}&sign={sign[1]}"
+    timestamp, sign = get_sign()
+    url = f"https://oapi.dingtalk.com/robot/send?access_token={os.getenv('DINGDING_TOKEN')}&timestamp={timestamp}&sign={sign}"
     res = requests.post(url,
                         headers={"Content-Type": "application/json; charset=utf-8"},
                         json=msg)

@@ -2,7 +2,9 @@
 
 ```shell
 # set env 
-
+DINGDING_TOKEN
+DINGDING_SECRET
+# run build 
 docker build -t python/zaobao .
 ```
 
