@@ -1,7 +1,8 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
 FROM python:3.9-slim
 
-ENV RANK=10
+ENV DINGDING_SECRET=$DINGDING_SECRET
+ENV DINGDING_TOKEN=$DINGDING_TOKEN
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
