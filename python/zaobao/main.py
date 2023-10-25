@@ -81,6 +81,11 @@ def build_message(_type, msg):
         }
 
 
+@app.get("/daily")
+def read_root():
+    return dingding_robot(build_message('markdown', build_markdown()))
+
+
 def build_markdown():
     env = Environment(
         loader=FileSystemLoader("templates"),
@@ -98,7 +103,7 @@ def dingding_robot(msg):
     res = requests.post(url,
                         headers={"Content-Type": "application/json; charset=utf-8"},
                         json=msg)
-    print(res.content.decode('utf-8'))
+    return res.content.decode('utf-8')
 
 
 def get_sign():
