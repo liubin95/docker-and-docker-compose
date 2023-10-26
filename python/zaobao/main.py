@@ -40,6 +40,17 @@ def daily_image():
     return {"url": img_url, "title": img_title, "copyright": img_copyright}
 
 
+def daily_clause():
+    date = time.strftime("%Y-%m-%d", time.localtime())
+    url = f'https://web.shanbay.com/opp/quotes/{date}'
+    res = requests.get(url)
+    html = res.content.decode('utf-8')
+    selector = Selector(text=html)
+    content = selector.xpath('//p[@class="content"]/text()').get()
+    translation = selector.xpath('//p[@class="translation"]/text()').get()
+    return {"content": content, "translation": translation}
+
+
 app = FastAPI(docs_url=None, redoc_url=None)
 
 app.add_middleware(
@@ -93,7 +104,7 @@ def build_markdown():
     )
     date = time.strftime("%Y年%m月%d日", time.localtime())
     template = env.get_template("daily.jinja")
-    res = template.render(news_list=daily_news(), image=daily_image(), date=date)
+    res = template.render(news_list=daily_news(), image=daily_image(), date=date, clause=daily_clause())
     return res
 
 
