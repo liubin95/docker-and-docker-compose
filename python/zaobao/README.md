@@ -20,4 +20,6 @@ sudo docker run -d --name liubin.zaobao -p '10308:8080' \
 python/zaobao
 
 sudo docker logs -f liubin.zaobao
+
+curl http://localhost:10308/daily -H 'authority:liubin'
 ```
