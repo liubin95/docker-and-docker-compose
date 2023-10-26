@@ -51,6 +51,30 @@ def daily_clause():
     return {"content": content, "translation": translation}
 
 
+def daily_weather():
+    # beijing dalian
+    city_list = [{'id': '101010100', 'name': '北京市', 'content': []},
+                 {'id': '101070201', 'name': '大连市', 'content': []}]
+    _key = os.getenv('QWEATHER_KEY')
+    for item in city_list:
+        _res = requests.get(f"https://devapi.qweather.com/v7/weather/now?key={_key}&location={item['id']}")
+        _json = _res.json()
+        fx_link = _json['fxLink']
+        feels_like = _json['now']['feelsLike']
+        res = requests.get(fx_link)
+        html = res.content.decode('utf-8')
+        selector = Selector(text=html)
+        abstract = selector.xpath('//div[@class="current-abstract"]//text()').get()
+        _url = f"https://devapi.qweather.com/v7/indices/1d?key={_key}&location={item['id']}&type=3,8"
+        _res = requests.get(_url)
+        item['name'] = f"{item['name']}天气"
+        item['content'].append(abstract)
+        item['content'].append(f'体感温度{feels_like}摄氏度。')
+        item['content'].append(f"{_res.json()['daily'][1]['text']}")
+        item['content'].append(f"{_res.json()['daily'][0]['text']}")
+    return city_list
+
+
 app = FastAPI(docs_url=None, redoc_url=None)
 
 app.add_middleware(
@@ -104,7 +128,11 @@ def build_markdown():
     )
     date = time.strftime("%Y年%m月%d日", time.localtime())
     template = env.get_template("daily.jinja")
-    res = template.render(news_list=daily_news(), image=daily_image(), date=date, clause=daily_clause())
+    res = template.render(news_list=daily_news(),
+                          image=daily_image(),
+                          date=date,
+                          clause=daily_clause(),
+                          weather_list=daily_weather())
     return res
 
 
@@ -130,4 +158,4 @@ def get_sign():
 
 if __name__ == '__main__':
     print('Hello World!')
-    dingding_robot(build_message('markdown', build_markdown()))
+    print(dingding_robot(build_message('markdown', build_markdown())))
