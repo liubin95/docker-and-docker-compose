@@ -1,0 +1,17 @@
+# 每日一杯 {{ date }}
+
+## {{ drink.name }}
+
+## 配料
+
+{% for item in drink.raw %}
+- {{ item.name }}-->{{ item.measure }}
+{% endfor %}
+
+## 步骤
+
+{{ drink.description }}
+
+## 图片
+
+![{{ drink.name }}]({{ drink.image }})

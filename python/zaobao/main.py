@@ -75,6 +75,25 @@ def daily_weather():
     return city_list
 
 
+def dail_alcohol():
+    url = "https://www.thecocktaildb.com/api/json/v1/1/random.php"
+    res = requests.get(url)
+    json = res.json()
+    drink = json['drinks'][0]
+    raw = []
+    for i in range(1, 15):
+        if drink[f'strIngredient{i}']:
+            raw.append({'name': drink[f'strIngredient{i}'], 'measure': drink[f'strMeasure{i}']})
+        else:
+            break
+    return {
+        'name': drink['strDrink'],
+        'description': drink['strInstructionsZH-HANS'] if drink['strInstructionsZH-HANS'] else drink['strInstructions'],
+        'image': drink['strDrinkThumb'],
+        'raw': raw
+    }
+
+
 app = FastAPI(docs_url=None, redoc_url=None)
 
 app.add_middleware(
@@ -117,8 +136,25 @@ def build_message(_type, msg):
 
 
 @app.get("/daily")
-def read_root():
+def api_daily():
     return dingding_robot(build_message('markdown', build_markdown()))
+
+
+@app.get("/alcohol")
+def api_alcohol():
+    return dingding_robot(build_message('markdown', build_markdown_alcohol()))
+
+
+def build_markdown_alcohol():
+    env = Environment(
+        loader=FileSystemLoader("templates"),
+        autoescape=select_autoescape()
+    )
+    date = time.strftime("%Y年%m月%d日", time.localtime())
+    template = env.get_template("alcohol.jinja")
+    res = template.render(drink=dail_alcohol(), date=date)
+
+    return res
 
 
 def build_markdown():
@@ -159,3 +195,4 @@ def get_sign():
 if __name__ == '__main__':
     print('Hello World!')
     print(dingding_robot(build_message('markdown', build_markdown())))
+    # print(dingding_robot(build_message('markdown', build_markdown_alcohol())))
