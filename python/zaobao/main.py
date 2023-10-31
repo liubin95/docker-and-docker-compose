@@ -11,6 +11,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from jinja2 import Environment, select_autoescape, FileSystemLoader
+from loguru import logger
 from parsel import Selector
 
 
@@ -25,9 +26,11 @@ def daily_news():
     selector = Selector(text=html)
     titles = selector.xpath('//div[@class="rank-item"]//a')
     titles = titles[:5]
-    return [{"href": f'{root_domain}{item.xpath("./@href").get()}', "title": item.xpath("./@title").get()} for item
-            in
-            titles]
+    res = [{"href": f'{root_domain}{item.xpath("./@href").get()}', "title": item.xpath("./@title").get()} for item
+           in
+           titles]
+    logger.debug("daily_news {}", res)
+    return res
 
 
 def daily_image():
@@ -37,7 +40,9 @@ def daily_image():
     img_url = "https://cn.bing.com" + res_bing['images'][0]['url']
     img_title = res_bing['images'][0]['title']
     img_copyright = res_bing['images'][0]['copyright']
-    return {"url": img_url, "title": img_title, "copyright": img_copyright}
+    res = {"url": img_url, "title": img_title, "copyright": img_copyright}
+    logger.debug("daily_image {}", res)
+    return res
 
 
 def daily_clause():
@@ -48,7 +53,9 @@ def daily_clause():
     selector = Selector(text=html)
     content = selector.xpath('//p[@class="content"]/text()').get()
     translation = selector.xpath('//p[@class="translation"]/text()').get()
-    return {"content": content, "translation": translation}
+    res = {"content": content, "translation": translation}
+    logger.debug("daily_clause {}", res)
+    return res
 
 
 def daily_weather():
@@ -72,6 +79,8 @@ def daily_weather():
         item['content'].append(f'体感温度{feels_like}摄氏度。')
         item['content'].append(f"{_res.json()['daily'][1]['text']}")
         item['content'].append(f"{_res.json()['daily'][0]['text']}")
+
+    logger.debug("daily_weather {}", city_list)
     return city_list
 
 
@@ -86,12 +95,14 @@ def dail_alcohol():
             raw.append({'name': drink[f'strIngredient{i}'], 'measure': drink[f'strMeasure{i}']})
         else:
             break
-    return {
+    res = {
         'name': drink['strDrink'],
         'description': drink['strInstructionsZH-HANS'] if drink['strInstructionsZH-HANS'] else drink['strInstructions'],
         'image': drink['strDrinkThumb'],
         'raw': raw
     }
+    logger.debug("dail_alcohol {}", res)
+    return res
 
 
 app = FastAPI(docs_url=None, redoc_url=None)
@@ -119,14 +130,14 @@ async def add_process_time_header(request: Request, call_next):
     return response
 
 
-def build_message(_type, msg):
+def build_message(_type, msg, title):
     if _type == 'text':
         return {"msgtype": "text", "text": {"content": msg}}
     elif _type == 'markdown':
         return {
             "msgtype": "markdown",
             "markdown": {
-                "title": "早报",
+                "title": title,
                 "text": msg
             },
             "at": {
@@ -137,12 +148,12 @@ def build_message(_type, msg):
 
 @app.get("/daily")
 def api_daily():
-    return dingding_robot(build_message('markdown', build_markdown()))
+    return dingding_robot(build_message('markdown', build_markdown(), '每日早报'))
 
 
 @app.get("/alcohol")
 def api_alcohol():
-    return dingding_robot(build_message('markdown', build_markdown_alcohol()))
+    return dingding_robot(build_message('markdown', build_markdown_alcohol(), '喝一杯'))
 
 
 def build_markdown_alcohol():
@@ -194,5 +205,6 @@ def get_sign():
 
 if __name__ == '__main__':
     print('Hello World!')
-    print(dingding_robot(build_message('markdown', build_markdown())))
+    print(build_markdown())
+    # print(dingding_robot(build_message('markdown', build_markdown())))
     # print(dingding_robot(build_message('markdown', build_markdown_alcohol())))
