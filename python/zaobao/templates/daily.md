@@ -17,13 +17,3 @@
 
 - {{ clause.content }}
 - {{ clause.translation }}
-
-## 天气预报
-
-{% for item in weather_list %}
-### {{ item.name }}
-{% for son_item in item.content %}
-- {{ son_item }}
-{% endfor %}
-
-{% endfor %}

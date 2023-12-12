@@ -63,4 +63,8 @@ mysql -u root -p123456 -h 127.0.0.1 -P 3306 new_base < old_table.sql
 # or into new base
 use new_base;
 source /old_table.sql
+
+#### mysql shell
+
+> [文档](https://dev.mysql.com/doc/mysql-shell/8.0/en/)
 ```
