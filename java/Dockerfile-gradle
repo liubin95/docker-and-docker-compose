@@ -1,0 +1,45 @@
+# syntax=docker/dockerfile:experimental
+# 使用eclipse-temurin:17-jdk-alpine作为构建阶段的基础镜像
+FROM eclipse-temurin:17-jdk-alpine AS build
+
+# 设置工作目录
+WORKDIR /workspace/app
+
+# 将当前目录的内容复制到工作目录
+COPY . /workspace/app
+
+# 使用Gradle Wrapper执行clean和bootJar任务，构建Spring Boot应用的可执行jar
+# 使用Docker的缓存挂载点来缓存Gradle的依赖，提高构建速度
+RUN --mount=type=cache,target=/root/.gradle ./gradlew clean bootJar
+
+# 使用Spring Boot的Layer Tools将可执行jar解压到build/dependency目录
+RUN mkdir -p build/dependency && java -Djarmode=layertools -jar build/libs/*.jar extract --destination build/dependency
+
+# 使用eclipse-temurin:17-jdk-alpine作为运行阶段的基础镜像
+FROM eclipse-temurin:17-jdk-alpine
+
+# 设置时区为Asia/Shanghai
+ENV TZ Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# 创建一个名为spring的用户
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring
+
+# 设置Java的启动参数
+ENV JAVA_OPTS="-Xmx500m -Xms500m"
+
+# 创建一个名为/tmp的卷，用于持久化数据
+VOLUME /tmp
+
+# 设置构建阶段解压的目录为变量
+ARG EXTRACTED=/workspace/app/build/dependency
+
+# 将构建阶段解压的各个层复制到镜像
+COPY --from=build ${EXTRACTED}/dependencies/ ./
+COPY --from=build ${EXTRACTED}/spring-boot-loader/ ./
+COPY --from=build ${EXTRACTED}/snapshot-dependencies/ ./
+COPY --from=build ${EXTRACTED}/application/ ./
+
+# 设置容器启动时的命令为启动Spring Boot应用
+ENTRYPOINT ["sh", "-c","java ${JAVA_OPTS} org.springframework.boot.loader.launch.JarLauncher"]
