@@ -1,0 +1,25 @@
+FROM node:20.14.0-alpine as builder
+LABEL authors="liubin"
+WORKDIR /app
+# 多一层缓存，避免每次都重新安装依赖
+COPY package.json yarn.lock .yarnrc.yml ./
+RUN corepack enable && yarn
+COPY . .
+RUN yarn build
+
+FROM nginx:1.27.0-alpine3.19 as runner
+
+ENV TZ Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+ARG NGINX_HOST
+ARG NGINX_PROXY_PASS
+
+COPY --from=builder /app/dist /var/www/${NGINX_HOST}/public
+COPY nginx.https.template /etc/nginx/templates/${NGINX_HOST}.conf.template
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD curl -f http://localhost || exit 1
+
+EXPOSE 80 443
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,0 +1,24 @@
+secrets:
+  fakedomain.com.crt:
+    file: /Users/liubin/.ssh/fakedomain/server.crt
+  fakedomain.com.key:
+    file: /Users/liubin/.ssh/fakedomain/server.key
+
+services:
+  react:
+    image: liubin/react
+    build:
+      context: ./vite-react-app
+      dockerfile: Dockerfile-build-run
+      args:
+        - NGINX_HOST=fakedomain.com
+        - NGINX_PROXY_PASS=fakedomain.com:5001
+    ports:
+      - "80:80"
+      - "443:443"
+    secrets:
+      - fakedomain.com.crt
+      - fakedomain.com.key
+    environment:
+      - NGINX_HOST=fakedomain.com
+      - NGINX_PROXY_PASS=fakedomain.com:5001
