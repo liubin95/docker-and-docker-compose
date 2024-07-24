@@ -67,6 +67,8 @@ docker volume prune
 docker image prune -a
 # rm everything
 docker system prune --volumes
+# 清理build的缓存
+docker builder prune
 ```
 
 ## docker remote
